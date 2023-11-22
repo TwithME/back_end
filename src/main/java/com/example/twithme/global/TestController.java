@@ -1,7 +1,7 @@
 package com.example.twithme.global;
 
-import com.example.dango.global.entity.ApiResponse;
-import com.example.dango.global.exception.BadRequestException;
+import com.example.twithme.global.entity.ApiResponse;
+import com.example.twithme.global.exception.BadRequestException;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
