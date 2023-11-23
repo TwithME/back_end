@@ -12,11 +12,11 @@ import java.util.List;
 @Repository
 public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
 
-    BoardLike findByTripylerAndUser(Board board, User user);
-    int countByTripyler(Board board);
+    BoardLike findByBoardAndUser(Board board, User user);
+    int countByBoard(Board board);
     List<BoardLike> findByUser(User user);
 
-    List<BoardLike> findByTripyler(Board board);
+    List<BoardLike> findByBoard(Board board);
 
     //게시물 필터링
     @Query(value = "SELECT tripyler_id as tripylerId, COUNT(tripyler_id) as cnt FROM tripyler_like GROUP BY tripyler_id ORDER BY cnt DESC",

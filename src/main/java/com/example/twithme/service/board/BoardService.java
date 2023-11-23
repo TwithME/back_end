@@ -148,14 +148,14 @@ public class BoardService {
     public List<BoardRes.TripylerListOrderByRegDateTime> getTripylerListOrderByRegDateTime(List<Board> boards) {
         List<BoardRes.TripylerListOrderByRegDateTime> tripylerList = new ArrayList<>();
         for (Board board : boards) {
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
                 String hashtag = boardHashtag.getHashtag().getName();
                 hashtagArray.add(hashtag);
             }
-            int likes = boardLikeRepository.countByTripyler(board);
-            int comments = boardCommentRepository.countByTripyler(board);
+            int likes = boardLikeRepository.countByBoard(board);
+            int comments = boardCommentRepository.countByBoard(board);
             int age;
             User user = board.getWriter();
             if(user.getBirthDate() == null || user.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
@@ -174,14 +174,14 @@ public class BoardService {
     public List<BoardRes.TripylerListOrderByLikes> getTripylerListOrderByLikes(List<Board> boards) {
         List<BoardRes.TripylerListOrderByLikes> tripylerList = new ArrayList<>();
         for (Board board : boards) {
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
                 String hashtag = boardHashtag.getHashtag().getName();
                 hashtagArray.add(hashtag);
             }
-            int likes = boardLikeRepository.countByTripyler(board);
-            int comments = boardCommentRepository.countByTripyler(board);
+            int likes = boardLikeRepository.countByBoard(board);
+            int comments = boardCommentRepository.countByBoard(board);
             int age;
             User user = board.getWriter();
             if(user.getBirthDate() == null || user.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
@@ -200,14 +200,14 @@ public class BoardService {
     public List<BoardRes.TripylerListOrderByComments> getTripylerListOrderByComments(List<Board> boards) {
         List<BoardRes.TripylerListOrderByComments> tripylerList = new ArrayList<>();
         for (Board board : boards) {
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
                 String hashtag = boardHashtag.getHashtag().getName();
                 hashtagArray.add(hashtag);
             }
-            int likes = boardLikeRepository.countByTripyler(board);
-            int comments = boardCommentRepository.countByTripyler(board);
+            int likes = boardLikeRepository.countByBoard(board);
+            int comments = boardCommentRepository.countByBoard(board);
             int age;
             User user = board.getWriter();
             if(user.getBirthDate() == null || user.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
@@ -226,14 +226,14 @@ public class BoardService {
     public List<BoardRes.TripylerListOrderByHits> getTripylerListOrderByHits(List<Board> boards) {
         List<BoardRes.TripylerListOrderByHits> tripylerList = new ArrayList<>();
         for (Board board : boards) {
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
                 String hashtag = boardHashtag.getHashtag().getName();
                 hashtagArray.add(hashtag);
             }
-            int likes = boardLikeRepository.countByTripyler(board);
-            int comments = boardCommentRepository.countByTripyler(board);
+            int likes = boardLikeRepository.countByBoard(board);
+            int comments = boardCommentRepository.countByBoard(board);
             int age;
             User user = board.getWriter();
             if(user.getBirthDate() == null || user.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
@@ -351,7 +351,7 @@ public class BoardService {
                 tripylerCreateDto.getSecondTripStyleId(), tripylerCreateDto.getThirdTripStyleId(),
                 tripylerCreateDto.getFourthTripStyleId(), tripylerCreateDto.getFifthTripStyleId());
 
-        List<BoardHashtag> boardHashtagList = boardHashtagRepository.findByTripyler(board);
+        List<BoardHashtag> boardHashtagList = boardHashtagRepository.findByBoard(board);
         List<Long> existingHashtagIds = new ArrayList<>();
         for(BoardHashtag boardHashtag : boardHashtagList) {
             existingHashtagIds.add(boardHashtag.getHashtag().getId());
@@ -377,7 +377,7 @@ public class BoardService {
 
         for(Long hashtagId : existingHashtagIds) {
             if(!newHashtagIds.contains(hashtagId)) {
-                Optional<BoardHashtag> optionalTripylerHashtag = Optional.ofNullable(boardHashtagRepository.findByTripylerAndHashtag_Id(board, hashtagId));
+                Optional<BoardHashtag> optionalTripylerHashtag = Optional.ofNullable(boardHashtagRepository.findByBoardAndHashtag_Id(board, hashtagId));
                 if(optionalTripylerHashtag.isEmpty()) {
                     throw new BadRequestException("해시태그를 삭제할 수 없습니다.");
                 }
@@ -422,7 +422,7 @@ public class BoardService {
     public void like(Long tripylerId, Long userId) {
         User user = userService.getUserByUserId(userId);
         Board board = getTripylerByTripylerId(tripylerId);
-        Optional<BoardLike> optionalTripylerLike = Optional.ofNullable(boardLikeRepository.findByTripylerAndUser(board, user));
+        Optional<BoardLike> optionalTripylerLike = Optional.ofNullable(boardLikeRepository.findByBoardAndUser(board, user));
         if(optionalTripylerLike.isPresent()) {
             BoardLike boardLike = optionalTripylerLike.get();
             boardLike.setDeleteYn(true);
@@ -457,7 +457,7 @@ public class BoardService {
 
     public BoardRes.BoardDetailRes getTripylerBoardDetail(Long tokenUserId, Long tripylerId) {
         Board board = getTripylerByTripylerId(tripylerId);
-        List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+        List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
 
 
         Nation nation = board.getNation();
@@ -475,8 +475,8 @@ public class BoardService {
 
 
         //좋아요, 댓글수, 내가 작성한 트리플러인지
-        int likes = boardLikeRepository.countByTripyler(board);
-        int commentsCnt = boardCommentRepository.countByTripyler(board);
+        int likes = boardLikeRepository.countByBoard(board);
+        int commentsCnt = boardCommentRepository.countByBoard(board);
         result.setLikes(likes);
         result.setCommentsCnt(commentsCnt);
         result.setMyTripyler(board.getWriter().getId().equals(tokenUserId));
@@ -484,7 +484,7 @@ public class BoardService {
 
 
         //토큰을 가지고 접근한 유저가 좋아요를 눌렀는지 안눌렀는지
-        List<BoardLike> boardLikeList = boardLikeRepository.findByTripyler(board);
+        List<BoardLike> boardLikeList = boardLikeRepository.findByBoard(board);
         for(BoardLike boardLike : boardLikeList){
             if(boardLike.getUser().getId().equals(tokenUserId)){
                 result.setTokenUserLiked(true);
@@ -506,7 +506,7 @@ public class BoardService {
         //이 트리플러에 동행한 사람들
         //동행한 사람 리스트
         List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
-        List<BoardApply> boardApplyAcceptedList = boardApplyRepository.findByTripylerAndAccepted(board, 1);
+        List<BoardApply> boardApplyAcceptedList = boardApplyRepository.findByBoardAndAccepted(board, 1);
 
         for(BoardApply boardApply : boardApplyAcceptedList){
             if(boardApply.getAccepted() == 1){
@@ -594,7 +594,7 @@ public class BoardService {
 
 
         for (Board board : boardList) {
-            List<BoardApply> boardApplyList = boardApplyRepository.findByTripylerId(board.getId());
+            List<BoardApply> boardApplyList = boardApplyRepository.findByBoardId(board.getId());
             for (BoardApply boardApply : boardApplyList) {
                 List<UserHashtag> userHashtags = userHashtagRepository.findByUser(boardApply.getApplicant());
                 List<String> hashtagArray = new ArrayList<>();
@@ -675,7 +675,7 @@ public class BoardService {
     public List<BoardRes.CommentRes> getTripylerComments(Long tripylerId) {
         List<BoardRes.CommentRes> result = new ArrayList<>();
         Board board = getTripylerByTripylerId(tripylerId);
-        List<BoardComment> boardComments = boardCommentRepository.findAllByTripylerOrderByRegDateTimeDesc(board);
+        List<BoardComment> boardComments = boardCommentRepository.findAllByBoardOrderByRegDateTimeDesc(board);
 
         for(BoardComment boardComment : boardComments){
             BoardRes.CommentRes e = BoardRes.CommentRes.builder()
@@ -706,7 +706,7 @@ public class BoardService {
             Region region = board.getRegion();
             String regionName = region != null ? region.getName() : null;
 
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
 
             String imageUrl;
             if(board.getImage() == null) {
@@ -723,8 +723,8 @@ public class BoardService {
                             .startDate(board.getStartDate())
                             .endDate(board.getEndDate())
                             .totalPeopleNum(board.getTotalPeopleNum())
-                            .likes(boardLikeRepository.countByTripyler(board))
-                            .comments(boardCommentRepository.countByTripyler(board))
+                            .likes(boardLikeRepository.countByBoard(board))
+                            .comments(boardCommentRepository.countByBoard(board))
                             .hashtag1(boardHashtags.get(0).getHashtag().getName())
                             .hashtag2(boardHashtags.get(1).getHashtag().getName())
                             .hashtag3(boardHashtags.get(2).getHashtag().getName())
@@ -748,7 +748,7 @@ public class BoardService {
             Region region = board.getRegion();
             String regionName = region != null ? region.getName() : null;
 
-            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
 
             String imageUrl;
             if(board.getImage() == null) {
@@ -765,8 +765,8 @@ public class BoardService {
                     .startDate(board.getStartDate())
                     .endDate(board.getEndDate())
                     .totalPeopleNum(board.getTotalPeopleNum())
-                    .likes(boardLikeRepository.countByTripyler(board))
-                    .comments(boardCommentRepository.countByTripyler(board))
+                    .likes(boardLikeRepository.countByBoard(board))
+                    .comments(boardCommentRepository.countByBoard(board))
                     .hashtag1(boardHashtags.get(0).getHashtag().getName())
                     .hashtag2(boardHashtags.get(1).getHashtag().getName())
                     .hashtag3(boardHashtags.get(2).getHashtag().getName())
@@ -828,8 +828,8 @@ public class BoardService {
                             .title(board.getTitle())
                             .recruitPeopleNum(board.getRecruitPeopleNum())
                             .totalPeopleNum(board.getTotalPeopleNum())
-                            .likes(boardLikeRepository.countByTripyler(board))
-                            .comments(boardCommentRepository.countByTripyler(board))
+                            .likes(boardLikeRepository.countByBoard(board))
+                            .comments(boardCommentRepository.countByBoard(board))
                             .hits(board.getHits())
                             .regDateTime(board.getRegDateTime())
                             .startDate(board.getStartDate())
@@ -857,7 +857,7 @@ public class BoardService {
             String regionName = region != null ? region.getName() : null;
 
             //내 트리플러에 신청한 사람들
-            List<BoardApply> boardApplyList = boardApplyRepository.findByTripyler(board);
+            List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
             List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
 
             for(BoardApply boardApply : boardApplyList){
@@ -908,7 +908,7 @@ public class BoardService {
 
 
             //내가 신청한 트리플러에 신청한 다른 사람들까지
-            List<BoardApply> boardApplyList = boardApplyRepository.findByTripyler(board);
+            List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
             List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
 
             for(BoardApply boardApply2 : boardApplyList){

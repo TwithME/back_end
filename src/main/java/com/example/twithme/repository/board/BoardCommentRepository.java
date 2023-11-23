@@ -9,7 +9,8 @@ import java.util.List;
 
 @Repository
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
-    int countByTripyler(Board board);
+    int countByBoard(Board board);
 
-    List<BoardComment> findAllByTripylerOrderByRegDateTimeDesc(Board board);
+
+    List<BoardComment> findAllByBoardOrderByRegDateTimeDesc(Board board);
 }

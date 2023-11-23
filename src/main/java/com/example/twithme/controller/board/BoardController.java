@@ -19,10 +19,10 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags={"07.Tripyler"})
+@Api(tags={"07.Board"})
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "/tripyler", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(path = "/board", produces = MediaType.APPLICATION_JSON_VALUE)
 public class BoardController {
     private final BoardService boardService;
     private final UserService userService;

@@ -13,8 +13,8 @@ public interface BoardHashtagRepository extends JpaRepository<BoardHashtag, Long
 
     List<BoardHashtag> findByHashtag(Hashtag hashtag);
 
-    List<BoardHashtag> findByTripyler(Board board);
+    List<BoardHashtag> findByBoard(Board board);
 
-    BoardHashtag findByTripylerAndHashtag_Id(Board board, Long hashtagId);
+    BoardHashtag findByBoardAndHashtag_Id(Board board, Long hashtagId);
 
 }

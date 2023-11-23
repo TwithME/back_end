@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findByTripyler(Board board);
+    List<Review> findByBoard(Board board);
     @Modifying
     @Query(value = "update review set hits = hits + 1 where id = :id",
             nativeQuery = true)
