@@ -21,14 +21,14 @@ import java.util.List;
 public class ProfileController {
     private final UserService userService;
 
-    @ApiOperation(value = "프로필 사진 업로드", notes = "프로필 사진을 업로드합니다.")
-    @PostMapping("/profile-picture")
-    public ApiResponse<String> uploadProfileImage(@RequestPart(name = "images", required = true) MultipartFile multipartFile,
-                                                  HttpServletRequest httpServletRequest) {
-        Long userId = userService.getUserId(httpServletRequest);
-        userService.uploadProfileImage(userId, multipartFile);
-        return new ApiResponse<>("프로필 사진 등록이 성공적으로 완료되었습니다.");
-    }
+//    @ApiOperation(value = "프로필 사진 업로드", notes = "프로필 사진을 업로드합니다.")
+//    @PostMapping("/profile-picture")
+//    public ApiResponse<String> uploadProfileImage(@RequestPart(name = "images", required = true) MultipartFile multipartFile,
+//                                                  HttpServletRequest httpServletRequest) {
+//        Long userId = userService.getUserId(httpServletRequest);
+//        userService.uploadProfileImage(userId, multipartFile);
+//        return new ApiResponse<>("프로필 사진 등록이 성공적으로 완료되었습니다.");
+//    }
 
     @ApiOperation(value = "프로필 사진 삭제", notes = "프로필 사진을 삭제합니다.")
     @DeleteMapping("/profile-picture")

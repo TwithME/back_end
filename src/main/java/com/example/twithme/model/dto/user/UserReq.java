@@ -93,44 +93,6 @@ public class UserReq {
     }
 
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class FindUserByName {
-        private String name;
-        private String phone;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class FindUserByUsername {
-        private String username;
-        private String phone;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ChangePassword {
-        private String username;
-        private String newPassword;
-        private String newPasswordCheck;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class MessageDto {
-        private String content;
-        private String senderName;
-        private String recipientName;
-        private LocalDateTime sendTime;
-    }
 
     @Data
     @NoArgsConstructor
