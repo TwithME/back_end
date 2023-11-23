@@ -15,9 +15,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "tripyler_like")
+@Table(name = "tripyler_comment")
 @Where(clause = "delete_yn = 0")
-public class TripylerLike extends BaseTimeEntity {
+public class BoardComment extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,11 +25,13 @@ public class TripylerLike extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tripyler_id")
-    private Tripyler tripyler;
+    private Board board;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    @JoinColumn(name = "commenter_id")
+    private User commenter;
+
+    private String content;
 
     @Column(name = "delete_yn")
     private boolean deleteYn;

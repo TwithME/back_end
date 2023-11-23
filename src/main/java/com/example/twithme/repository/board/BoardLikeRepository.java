@@ -1,7 +1,7 @@
 package com.example.twithme.repository.board;
 
-import com.example.twithme.model.entity.board.Tripyler;
-import com.example.twithme.model.entity.board.TripylerLike;
+import com.example.twithme.model.entity.board.Board;
+import com.example.twithme.model.entity.board.BoardLike;
 import com.example.twithme.model.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -10,13 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface TripylerLikeRepository extends JpaRepository<TripylerLike, Long> {
+public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
 
-    TripylerLike findByTripylerAndUser(Tripyler tripyler, User user);
-    int countByTripyler(Tripyler tripyler);
-    List<TripylerLike> findByUser(User user);
+    BoardLike findByTripylerAndUser(Board board, User user);
+    int countByTripyler(Board board);
+    List<BoardLike> findByUser(User user);
 
-    List<TripylerLike> findByTripyler(Tripyler tripyler);
+    List<BoardLike> findByTripyler(Board board);
 
     //게시물 필터링
     @Query(value = "SELECT tripyler_id as tripylerId, COUNT(tripyler_id) as cnt FROM tripyler_like GROUP BY tripyler_id ORDER BY cnt DESC",

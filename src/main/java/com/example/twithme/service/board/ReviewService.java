@@ -4,7 +4,7 @@ import com.example.twithme.common.exception.NotFoundException;
 import com.example.twithme.service.S3Service;
 import com.example.twithme.model.dto.board.ReviewReq;
 import com.example.twithme.model.dto.board.ReviewRes;
-import com.example.twithme.model.dto.board.TripylerRes;
+import com.example.twithme.model.dto.board.BoardRes;
 import com.example.twithme.model.entity.board.*;
 import com.example.twithme.model.entity.destination.Nation;
 import com.example.twithme.model.entity.destination.Region;
@@ -47,15 +47,15 @@ public class ReviewService {
 
     private final HashtagRepository hashtagRepository;
 
-    private final TripylerRepository tripylerRepository;
+    private final BoardRepository boardRepository;
 
-    private final TripylerLikeRepository tripylerLikeRepository;
+    private final BoardLikeRepository boardLikeRepository;
 
-    private final TripylerCommentRepository tripylerCommentRepository;
+    private final BoardCommentRepository boardCommentRepository;
 
-    private final TripylerHashtagRepository tripylerHashtagRepository;
+    private final BoardHashtagRepository boardHashtagRepository;
 
-    private final TripylerApplyRepository tripylerApplyRepository;
+    private final BoardApplyRepository boardApplyRepository;
 
     private final ReviewRepository reviewRepository;
 
@@ -65,7 +65,7 @@ public class ReviewService {
 
     private final ReviewImageRepository reviewImageRepository;
 
-    private final TripylerService tripylerService;
+    private final BoardService boardService;
 
 
     public Review getReviewByReviewId(Long reviewId) {
@@ -78,11 +78,11 @@ public class ReviewService {
 
 
     public Long createReview(Long userId, ReviewReq.ReviewCreateDto reviewCreateDto) {
-        Tripyler tripyler = tripylerService.getTripylerByTripylerId(reviewCreateDto.getTripylerId());
+        Board board = boardService.getTripylerByTripylerId(reviewCreateDto.getTripylerId());
         User user = userService.getUserByUserId(userId);
 
         Review review = Review.builder()
-                .tripyler(tripyler)
+                .board(board)
                 .writer(user)
                 .title(reviewCreateDto.getTitle())
                 .content(reviewCreateDto.getContent())
@@ -154,13 +154,13 @@ public class ReviewService {
 
     public ReviewRes.ReviewDetailRes getReviewDetail(Long tokenUserId, Long reviewId) {
         Review review = getReviewByReviewId(reviewId);
-        Tripyler tripyler = review.getTripyler();
-        List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+        Board board = review.getBoard();
+        List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
 
 
         String nationName;
         try {
-            nationName = tripyler.getNation().getName();
+            nationName = board.getNation().getName();
         }
         catch(NullPointerException e) {
             nationName = null;
@@ -168,7 +168,7 @@ public class ReviewService {
 
         String regionName;
         try {
-            regionName = tripyler.getRegion().getName();
+            regionName = board.getRegion().getName();
         }
         catch(NullPointerException e) {
             regionName = null;
@@ -190,12 +190,12 @@ public class ReviewService {
 
         //동행한 사람 리스트
         List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
-        List<TripylerApply> tripylerApplyList = tripylerApplyRepository.findByTripyler(tripyler);
+        List<BoardApply> boardApplyList = boardApplyRepository.findByTripyler(board);
 
-        for(TripylerApply tripylerApply : tripylerApplyList){
-            if(tripylerApply.getAccepted() == 1){
+        for(BoardApply boardApply : boardApplyList){
+            if(boardApply.getAccepted() == 1){
                 int age;
-                User applicant = tripylerApply.getApplicant();
+                User applicant = boardApply.getApplicant();
                 if(applicant.getBirthDate() == null || applicant.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
                     age = 0;
                 } else {
@@ -245,30 +245,30 @@ public class ReviewService {
 
 
         //해시태그 불러오기
-        if(tripylerHashtags.size() == 5){
-            result.setHashtag1(tripylerHashtags.get(0).getHashtag().getName());
-            result.setHashtag2(tripylerHashtags.get(1).getHashtag().getName());
-            result.setHashtag3(tripylerHashtags.get(2).getHashtag().getName());
-            result.setHashtag4(tripylerHashtags.get(3).getHashtag().getName());
-            result.setHashtag5(tripylerHashtags.get(4).getHashtag().getName());
+        if(boardHashtags.size() == 5){
+            result.setHashtag1(boardHashtags.get(0).getHashtag().getName());
+            result.setHashtag2(boardHashtags.get(1).getHashtag().getName());
+            result.setHashtag3(boardHashtags.get(2).getHashtag().getName());
+            result.setHashtag4(boardHashtags.get(3).getHashtag().getName());
+            result.setHashtag5(boardHashtags.get(4).getHashtag().getName());
         }
-        else if(tripylerHashtags.size() == 4){
-            result.setHashtag1(tripylerHashtags.get(0).getHashtag().getName());
-            result.setHashtag2(tripylerHashtags.get(1).getHashtag().getName());
-            result.setHashtag3(tripylerHashtags.get(2).getHashtag().getName());
-            result.setHashtag4(tripylerHashtags.get(3).getHashtag().getName());
+        else if(boardHashtags.size() == 4){
+            result.setHashtag1(boardHashtags.get(0).getHashtag().getName());
+            result.setHashtag2(boardHashtags.get(1).getHashtag().getName());
+            result.setHashtag3(boardHashtags.get(2).getHashtag().getName());
+            result.setHashtag4(boardHashtags.get(3).getHashtag().getName());
         }
-        else if(tripylerHashtags.size() == 3){
-            result.setHashtag1(tripylerHashtags.get(0).getHashtag().getName());
-            result.setHashtag2(tripylerHashtags.get(1).getHashtag().getName());
-            result.setHashtag3(tripylerHashtags.get(2).getHashtag().getName());
+        else if(boardHashtags.size() == 3){
+            result.setHashtag1(boardHashtags.get(0).getHashtag().getName());
+            result.setHashtag2(boardHashtags.get(1).getHashtag().getName());
+            result.setHashtag3(boardHashtags.get(2).getHashtag().getName());
         }
-        else if(tripylerHashtags.size() == 2){
-            result.setHashtag1(tripylerHashtags.get(0).getHashtag().getName());
-            result.setHashtag2(tripylerHashtags.get(1).getHashtag().getName());
+        else if(boardHashtags.size() == 2){
+            result.setHashtag1(boardHashtags.get(0).getHashtag().getName());
+            result.setHashtag2(boardHashtags.get(1).getHashtag().getName());
         }
-        else if(tripylerHashtags.size() == 1){
-            result.setHashtag1(tripylerHashtags.get(0).getHashtag().getName());
+        else if(boardHashtags.size() == 1){
+            result.setHashtag1(boardHashtags.get(0).getHashtag().getName());
         }
 
 
@@ -314,44 +314,44 @@ public class ReviewService {
         return result;
     }
 
-    public List<TripylerRes.MyTripylerApplyListDto> findReviewByLike(Long userId) {
+    public List<BoardRes.MyTripylerApplyListDto> findReviewByLike(Long userId) {
         User user = userService.getUserByUserId(userId);
         List<ReviewLike> reviewLikes = reviewLikeRepository.findByUser(user);
-        List<TripylerRes.MyTripylerApplyListDto> myTripylerApplyListDtos = new ArrayList<>();
+        List<BoardRes.MyTripylerApplyListDto> myTripylerApplyListDtos = new ArrayList<>();
 
         for(ReviewLike reviewLike : reviewLikes) {
-            Tripyler tripyler = reviewLike.getReview().getTripyler();
+            Board board = reviewLike.getReview().getBoard();
 
-            Nation nation = tripyler.getNation();
+            Nation nation = board.getNation();
             String nationName = nation != null ? nation.getName() : null;
-            Region region = tripyler.getRegion();
+            Region region = board.getRegion();
             String regionName = region != null ? region.getName() : null;
 
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
 
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
 
-            myTripylerApplyListDtos.add(TripylerRes.MyTripylerApplyListDto.builder()
-                            .userId(tripyler.getWriter().getId())
+            myTripylerApplyListDtos.add(BoardRes.MyTripylerApplyListDto.builder()
+                            .userId(board.getWriter().getId())
                             .tripylerId(reviewLike.getReview().getId())
                             .nationName(nationName)
                             .regionName(regionName)
-                            .startDate(tripyler.getStartDate())
-                            .endDate(tripyler.getEndDate())
-                            .totalPeopleNum(tripyler.getTotalPeopleNum())
-                            .likes(tripylerLikeRepository.countByTripyler(tripyler))
-                            .comments(tripylerCommentRepository.countByTripyler(tripyler))
-                            .hashtag1(tripylerHashtags.get(0).getHashtag().getName())
-                            .hashtag2(tripylerHashtags.get(1).getHashtag().getName())
-                            .hashtag3(tripylerHashtags.get(2).getHashtag().getName())
-                            .hashtag4(tripylerHashtags.get(3).getHashtag().getName())
-                            .hashtag5(tripylerHashtags.get(4).getHashtag().getName())
+                            .startDate(board.getStartDate())
+                            .endDate(board.getEndDate())
+                            .totalPeopleNum(board.getTotalPeopleNum())
+                            .likes(boardLikeRepository.countByTripyler(board))
+                            .comments(boardCommentRepository.countByTripyler(board))
+                            .hashtag1(boardHashtags.get(0).getHashtag().getName())
+                            .hashtag2(boardHashtags.get(1).getHashtag().getName())
+                            .hashtag3(boardHashtags.get(2).getHashtag().getName())
+                            .hashtag4(boardHashtags.get(3).getHashtag().getName())
+                            .hashtag5(boardHashtags.get(4).getHashtag().getName())
                             .imageUrl(imageUrl)
                             .build());
         }
@@ -362,10 +362,10 @@ public class ReviewService {
         List<ReviewRes.MyReviewListDto> myReviewListDtos = new ArrayList<>();
         List<Review> reviews = reviewRepository.findByYearAndUserId(year, userId);
         for(Review review : reviews) {
-            Tripyler tripyler = review.getTripyler();
-            Nation nation = tripyler.getNation();
+            Board board = review.getBoard();
+            Nation nation = board.getNation();
             String nationName = nation != null ? nation.getName() : null;
-            Region region = tripyler.getRegion();
+            Region region = board.getRegion();
             String regionName = region != null ? region.getName() : null;
 
             List<ReviewImage> reviewImages = reviewImageRepository.findAllByReview(review);
@@ -378,13 +378,13 @@ public class ReviewService {
                     .reviewId(review.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .tripylerTitle(tripyler.getTitle())
+                    .tripylerTitle(board.getTitle())
                     .reviewTitle(review.getTitle())
-                    .likes(tripylerLikeRepository.countByTripyler(tripyler))
-                    .comments(tripylerCommentRepository.countByTripyler(tripyler))
+                    .likes(boardLikeRepository.countByTripyler(board))
+                    .comments(boardCommentRepository.countByTripyler(board))
                     .hits(review.getHits())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
                     .imageUrls(imageUrls)
                     .build());
         }
@@ -400,8 +400,8 @@ public class ReviewService {
         List<Review> tempReviews = new ArrayList<>();
         List<Review> returnReviews = new ArrayList<>();
 
-        List<Tripyler> tripylers;
-        List<Tripyler> returnTripylers = new ArrayList<>();
+        List<Board> boards;
+        List<Board> returnBoards = new ArrayList<>();
 
         Long nationId = null;
         if (reviewOptionDto.getNationId() != null) {
@@ -426,37 +426,37 @@ public class ReviewService {
 
         List<Hashtag> hashtags = hashtagRepository.findByNameContains(keyword); // 키워드가 포함된 해시태그 객체를 불러옴
 
-        List<Tripyler> tripylersWithKeyword = new ArrayList<>();
+        List<Board> tripylersWithKeyword = new ArrayList<>();
 
 
         for (Hashtag hashtag : hashtags) {
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByHashtag(hashtag);
-            for (TripylerHashtag tripylerHashtag : tripylerHashtags) {
-                Tripyler tripyler = tripylerHashtag.getTripyler();
-                tripylersWithKeyword.add(tripyler);
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByHashtag(hashtag);
+            for (BoardHashtag boardHashtag : boardHashtags) {
+                Board board = boardHashtag.getBoard();
+                tripylersWithKeyword.add(board);
             }
         }
 
         if (nationId != null && regionId != null) {
-            tripylers = tripylerRepository.findByContinentIdAndNationIdAndRegionId(continentId, nationId, regionId);
+            boards = boardRepository.findByContinentIdAndNationIdAndRegionId(continentId, nationId, regionId);
         } else if (nationId != null) {
-            tripylers = tripylerRepository.findByContinentIdAndNationId(continentId, nationId);
+            boards = boardRepository.findByContinentIdAndNationId(continentId, nationId);
         } else {
-            tripylers = tripylerRepository.findByContinentId(continentId);
+            boards = boardRepository.findByContinentId(continentId);
         }
 
-        for (Tripyler tripyler : tripylers) {
-            int tripStartMonthValue = tripyler.getStartDate().getMonthValue();
-            int tripEndMonthValue = tripyler.getEndDate().getMonthValue();
+        for (Board board : boards) {
+            int tripStartMonthValue = board.getStartDate().getMonthValue();
+            int tripEndMonthValue = board.getEndDate().getMonthValue();
             if (tripStartMonthValue >= startMonth && tripEndMonthValue <= endMonth &&
-                    tripyler.getTotalPeopleNum() == totalNum) {
-                returnTripylers.add(tripyler);
+                    board.getTotalPeopleNum() == totalNum) {
+                returnBoards.add(board);
             }
         }
 
 
-        for (Tripyler tripyler : returnTripylers) {
-            List<Review> reviewList = reviewRepository.findByTripyler(tripyler);
+        for (Board board : returnBoards) {
+            List<Review> reviewList = reviewRepository.findByTripyler(board);
             tempReviews.addAll(reviewList);
         }
 
@@ -473,11 +473,11 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByRegDateTime> getReviewListOrderByRegDateTime(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByRegDateTime> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Tripyler tripyler = tripylerRepository.findTripylerById(review.getTripyler().getId());
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
             List<String> hashtagList = new ArrayList<>();
-            for (TripylerHashtag tripylerHashtag: tripylerHashtags){
-                hashtagList.add(tripylerHashtag.getHashtag().getName());
+            for (BoardHashtag boardHashtag : boardHashtags){
+                hashtagList.add(boardHashtag.getHashtag().getName());
             }
             User writer = review.getWriter();
             int age;
@@ -487,17 +487,17 @@ public class ReviewService {
                 age = LocalDate.now().getYear() - writer.getBirthDate().getYear() + 1;
             }
 
-            String regionName = tripyler.getRegion() != null ? tripyler.getRegion().getName() : null;
+            String regionName = board.getRegion() != null ? board.getRegion().getName() : null;
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
             reviewList.add(ReviewRes.ReviewListDtoOrderByRegDateTime.builder()
                     .reviewId(review.getId())
-                    .nationName(tripyler.getNation().getName())
+                    .nationName(board.getNation().getName())
                     .regionName(regionName)
                     .title(review.getTitle())
                     .content(review.getContent())
@@ -511,8 +511,8 @@ public class ReviewService {
                     .username(writer.getUsername())
                     .age(age)
                     .gender(writer.getGender())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
                     .build());
         }
         Collections.sort(reviewList);
@@ -522,11 +522,11 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByLikes> getReviewListOrderByLikes(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByLikes> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Tripyler tripyler = tripylerRepository.findTripylerById(review.getTripyler().getId());
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
             List<String> hashtagList = new ArrayList<>();
-            for (TripylerHashtag tripylerHashtag: tripylerHashtags){
-                hashtagList.add(tripylerHashtag.getHashtag().getName());
+            for (BoardHashtag boardHashtag : boardHashtags){
+                hashtagList.add(boardHashtag.getHashtag().getName());
             }
             User writer = review.getWriter();
             int age;
@@ -535,17 +535,17 @@ public class ReviewService {
             } else {
                 age = LocalDate.now().getYear() - writer.getBirthDate().getYear() + 1;
             }
-            String regionName = tripyler.getRegion() != null ? tripyler.getRegion().getName() : null;
+            String regionName = board.getRegion() != null ? board.getRegion().getName() : null;
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
             reviewList.add(ReviewRes.ReviewListDtoOrderByLikes.builder()
                     .reviewId(review.getId())
-                    .nationName(tripyler.getNation().getName())
+                    .nationName(board.getNation().getName())
                     .regionName(regionName)
                     .title(review.getTitle())
                     .content(review.getContent())
@@ -559,8 +559,8 @@ public class ReviewService {
                     .username(writer.getUsername())
                     .age(age)
                     .gender(writer.getGender())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
                     .build());
         }
         Collections.sort(reviewList);
@@ -570,11 +570,11 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByComments> getReviewListOrderByComments(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByComments> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Tripyler tripyler = tripylerRepository.findTripylerById(review.getTripyler().getId());
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
             List<String> hashtagList = new ArrayList<>();
-            for (TripylerHashtag tripylerHashtag: tripylerHashtags){
-                hashtagList.add(tripylerHashtag.getHashtag().getName());
+            for (BoardHashtag boardHashtag : boardHashtags){
+                hashtagList.add(boardHashtag.getHashtag().getName());
             }
             User writer = review.getWriter();
             int age;
@@ -583,18 +583,18 @@ public class ReviewService {
             } else {
                 age = LocalDate.now().getYear() - writer.getBirthDate().getYear() + 1;
             }
-            String regionName = tripyler.getRegion() != null ? tripyler.getRegion().getName() : null;
+            String regionName = board.getRegion() != null ? board.getRegion().getName() : null;
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
             reviewList.add(ReviewRes.ReviewListDtoOrderByComments.builder()
                     .reviewId(review.getId())
                     .nationName(regionName)
-                    .regionName(tripyler.getRegion().getName())
+                    .regionName(board.getRegion().getName())
                     .title(review.getTitle())
                     .content(review.getContent())
                     .image(imageUrl)
@@ -607,8 +607,8 @@ public class ReviewService {
                     .username(writer.getUsername())
                     .age(age)
                     .gender(writer.getGender())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
                     .build());
         }
         Collections.sort(reviewList);
@@ -618,11 +618,11 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByHits> getReviewListOrderByHits(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByHits> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Tripyler tripyler = tripylerRepository.findTripylerById(review.getTripyler().getId());
-            List<TripylerHashtag> tripylerHashtags = tripylerHashtagRepository.findByTripyler(tripyler);
+            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            List<BoardHashtag> boardHashtags = boardHashtagRepository.findByTripyler(board);
             List<String> hashtagList = new ArrayList<>();
-            for (TripylerHashtag tripylerHashtag: tripylerHashtags){
-                hashtagList.add(tripylerHashtag.getHashtag().getName());
+            for (BoardHashtag boardHashtag : boardHashtags){
+                hashtagList.add(boardHashtag.getHashtag().getName());
             }
             User writer = review.getWriter();
             int age;
@@ -631,17 +631,17 @@ public class ReviewService {
             } else {
                 age = LocalDate.now().getYear() - writer.getBirthDate().getYear() + 1;
             }
-            String regionName = tripyler.getRegion() != null ? tripyler.getRegion().getName() : null;
+            String regionName = board.getRegion() != null ? board.getRegion().getName() : null;
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
             reviewList.add(ReviewRes.ReviewListDtoOrderByHits.builder()
                     .reviewId(review.getId())
-                    .nationName(tripyler.getNation().getName())
+                    .nationName(board.getNation().getName())
                     .regionName(regionName)
                     .title(review.getTitle())
                     .content(review.getContent())
@@ -655,8 +655,8 @@ public class ReviewService {
                     .username(writer.getUsername())
                     .age(age)
                     .gender(writer.getGender())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
                     .build());
         }
         Collections.sort(reviewList);

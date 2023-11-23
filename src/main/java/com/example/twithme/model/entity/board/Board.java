@@ -21,7 +21,7 @@ import java.time.LocalDate;
 @Entity
 @Table(name = "tripyler")
 @Where(clause = "delete_yn = 0")
-public class Tripyler extends BaseTimeEntity {
+public class Board extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

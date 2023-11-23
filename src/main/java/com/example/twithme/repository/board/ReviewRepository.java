@@ -1,7 +1,7 @@
 package com.example.twithme.repository.board;
 
 import com.example.twithme.model.entity.board.Review;
-import com.example.twithme.model.entity.board.Tripyler;
+import com.example.twithme.model.entity.board.Board;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface ReviewRepository extends JpaRepository<Review, Long> {
 
-    List<Review> findByTripyler(Tripyler tripyler);
+    List<Review> findByTripyler(Board board);
     @Modifying
     @Query(value = "update review set hits = hits + 1 where id = :id",
             nativeQuery = true)
