@@ -56,16 +56,25 @@ public class UserController {
             throw new ServerErrorException();
         }
         String snsId = jsonArray.get("sub").toString();
+
+
+        //카카오 유저 생성
         boolean needsAdditionalSignUp = false;
         if(!userService.existsSnsUser("kakao", snsId)) {
-            userService.doKakaoSignUp(snsId, kakaoLogInDto.getSnsToken());
+            userService.doKakaoSignUp(kakaoLogInDto);
             needsAdditionalSignUp = true;
         }
+
+        //통합 소셜 로그인
         UserRes.UserInfoWithToken userInfoWithToken = userService.doSocialLogIn("kakao", snsId);
         userInfoWithToken.setNeedsAdditionalSignUp(needsAdditionalSignUp);
+
+
+        //트윗미 서비스 액세스 토큰 발급
         if(userInfoWithToken.getId().equals(0L)) {
             throw new BadRequestException("회원가입을 먼저 진행해주세요.");
         }
+
         return new ApiResponse<>(userInfoWithToken);
     }
 

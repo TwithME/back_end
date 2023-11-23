@@ -72,45 +72,31 @@ public class UserService {
                 .id(0L)
                 .build();
     }
-    public void doKakaoSignUp(String snsId, String snsToken) {
-//        UserRes.NaverProfileResponseDto naverProfileResponse;
-//        final String naverProfileUrl = "https://kapi.kakao.com/v2/user/me";
-//        HttpHeaders httpHeaders = new HttpHeaders();
-//        httpHeaders.set("Authorization", "Bearer " + kakaoLogInDto.getSnsToken());
-//        HttpEntity<String> httpEntity = new HttpEntity<>(httpHeaders);
-//        try {
-//            ResponseEntity<UserRes.NaverProfileResponseDto> response = restTemplate.exchange(naverProfileUrl, HttpMethod.GET, httpEntity, UserRes.NaverProfileResponseDto.class);
-//            if(response.getStatusCodeValue() != HttpStatus.OK.value()) {
-//                throw new ServerErrorException();
-//            }
-//            naverProfileResponse = response.getBody();
-//            if(naverProfileResponse == null){
-//                throw new BadRequestException("카카오 회원가입 중 오류가 발생했습니다.");
-//            }
-//        }
-//        catch (RestClientException e) {
-//            throw new ServerErrorException();
-//        }
-//        회원 관련 정보 받아야 함
 
+    //유저만 생성 및 저장
+    public void doKakaoSignUp(UserReq.KakaoLogInDto kakaoLogInDto) {
         User user = User.builder()
+                .snsId(kakaoLogInDto.getSnsId())
+                .snsToken(kakaoLogInDto.getSnsToken())
                 .loginType("kakao")
-                //.snsId(snsId)
-                //.snsToken(snsToken)
-                .userRole("ROLE_USER")
+                .name(kakaoLogInDto.getName())
+                .profileUrl(kakaoLogInDto.getProfileImage())
                 .firstLogin(true)
+                .userRole("ROLE_USER")
                 .build();
         userRepository.save(user);
     }
 
+
+    //기본 정보 이외에 추가 정보 저장
     public void doKakaoAdditionalSignUp(Long userId, UserReq.KakaoSignUpDto kakaoSignUpDto) {
         Optional<User> optionalUser = userRepository.findById(userId);
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setName(kakaoSignUpDto.getName());
-            user.setBirthDate(kakaoSignUpDto.getBirthDate());
             user.setGender(kakaoSignUpDto.getGender());
-            //user.setEmail(kakaoSignUpDto.getEmail());
+            user.setPhone(kakaoSignUpDto.getPhone());
+            user.setInstagram(kakaoSignUpDto.getInstagram());
+            user.setBirthDate(kakaoSignUpDto.getBirthDate());
             user.setFirstLogin(true);
             userRepository.save(user);
         }
@@ -124,19 +110,6 @@ public class UserService {
     }
 
 
-
-    //로그인 타입이 phone이 아니면 소셜로그인으로 하라고 알려주기
-    //아이디 찾기
-    public UserRes.findUserByName findUserByName(UserReq.FindUserByName findUserByName) {
-        User user = userRepository.findByNameAndPhone(findUserByName.getName(), findUserByName.getPhone());
-
-        if(user == null)
-            throw new NotFoundException("유저를 찾을 수 없습니다. 소셜로그인으로 접근해주세요");
-
-        UserRes.findUserByName result = new UserRes.findUserByName(user.getUsername());
-
-        return result;
-    }
 
 
     public void uploadProfileImage(Long userId, MultipartFile multipartFile) {
