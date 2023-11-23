@@ -1,9 +1,5 @@
 package com.example.twithme.global.jwt;
 
-import com.example.twithme.user.dto.GenerateToken;
-import com.example.twithme.user.entity.User;
-import com.example.twithme.user.repository.UserRepository;
-import com.example.twithme.user.service.CustomUserDetailsService;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -34,9 +30,7 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     private final String secret;
-    private final UserRepository userRepository;
     private final String refreshSecret;
-    private final CustomUserDetailsService customUserDetailsService;
     private final long accessTime;
     private final long refreshTime;
     private Key key;
@@ -45,15 +39,11 @@ public class TokenProvider implements InitializingBean {
     public TokenProvider(
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.refresh}") String refreshSecret,
-            UserRepository userRepository,
-            CustomUserDetailsService customUserDetailsService,
             @Value("${jwt.access-token-seconds}") long accessTime,
             @Value("${jwt.refresh-token-seconds}")long refreshTime) {
 
         this.secret = secret;
-        this.userRepository = userRepository;
         this.refreshSecret=refreshSecret;
-        this.customUserDetailsService=customUserDetailsService;
         this.accessTime = accessTime*1000;
         this.refreshTime = refreshTime*1000;
     }
@@ -96,14 +86,6 @@ public class TokenProvider implements InitializingBean {
     }
 
 
-    public GenerateToken createAllToken(Long userId){
-        String accessToken=createToken(userId);
-        String refreshToken=createRefreshToken(userId);
-
-        return new GenerateToken(accessToken,refreshToken);
-    }
-
-
     public Authentication getAuthentication(String token) {
         Claims claims = Jwts
                 .parserBuilder()
@@ -113,13 +95,7 @@ public class TokenProvider implements InitializingBean {
                 .getBody();
 
         Long userId = claims.get("userId",Long.class);
-
-        User user = userRepository.findUserById(userId).get();
-        String kakaoId = String.valueOf(user.getKakaoId());
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(kakaoId);
-
-        return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
+        return null;
     }
 
 
