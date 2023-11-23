@@ -24,7 +24,7 @@ public class UserRes {
     @Builder
     public static class UserInfoWithToken {
         private Long id;
-        private String nickname;
+        private String name;
         private int alarmNum;
         private String accessToken;
         private boolean needsAdditionalSignUp;

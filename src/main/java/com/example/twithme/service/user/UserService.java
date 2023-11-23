@@ -62,7 +62,7 @@ public class UserService {
             user.setFirstLogin(false);
             return UserRes.UserInfoWithToken.builder()
                     .id(user.getId())
-                    .nickname(user.getNickname())
+                    .name(user.getName())
                     .alarmNum(0)
                     .accessToken(jwtTokenProvider.createAccessToken(String.valueOf(user.getId()), Collections.singletonList(user.getUserRole())))
                     .isFirstLogin(isFirstLogin)
