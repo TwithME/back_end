@@ -1,6 +1,6 @@
 package com.example.twithme.controller.board;
 
-import com.example.twithme.common.exception.dto.HttpRes;
+import com.example.twithme.common.model.ApiResponse;
 import com.example.twithme.model.dto.board.ReviewRes;
 import com.example.twithme.model.dto.board.TripylerRes;
 import com.example.twithme.service.board.ReviewService;
@@ -29,46 +29,46 @@ public class MyCollectionsController {
 
     @ApiOperation(value = "내가 신청한 Tripyler", notes = "내가 신청한 Tripyler 목록을 조회합니다.")
     @GetMapping("/tripyler-apply-list")
-    HttpRes<List<TripylerRes.MyTripylerApplyListDto>> getMyTriplerApplyList(HttpServletRequest httpServletRequest) {
+    ApiResponse<List<TripylerRes.MyTripylerApplyListDto>> getMyTriplerApplyList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(tripylerService.findTripylerApplyByApplicantId(userId));
+        return new ApiResponse<>(tripylerService.findTripylerApplyByApplicantId(userId));
     }
 
     @ApiOperation(value = "내가 찜한 Tripyler", notes = "내가 찜한 Tripyler 목록을 조회합니다.")
     @GetMapping("/tripyler-like-list")
-    HttpRes<List<TripylerRes.MyTripylerApplyListDto>> getMyTriplerLikeList(HttpServletRequest httpServletRequest) {
+    ApiResponse<List<TripylerRes.MyTripylerApplyListDto>> getMyTriplerLikeList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(tripylerService.findTripylerByLike(userId));
+        return new ApiResponse<>(tripylerService.findTripylerByLike(userId));
     }
 
     @ApiOperation(value = "내가 찜한 Triplog", notes = "내가 찜한 Triplog 목록을 조회합니다.")
     @GetMapping("/review-like-list")
-    HttpRes<List<TripylerRes.MyTripylerApplyListDto>> getMyReviewLikeList(HttpServletRequest httpServletRequest) {
+    ApiResponse<List<TripylerRes.MyTripylerApplyListDto>> getMyReviewLikeList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(reviewService.findReviewByLike(userId));
+        return new ApiResponse<>(reviewService.findReviewByLike(userId));
     }
 
     @ApiOperation(value = "My Tripyler들", notes = "내가 작성한 Tripyler 목록을 조회합니다.")
     @GetMapping("/my-tripylers")
-    HttpRes<List<TripylerRes.MyTripylerListDto>> getMyTripylerList(@RequestParam int year,
-            HttpServletRequest httpServletRequest) {
+    ApiResponse<List<TripylerRes.MyTripylerListDto>> getMyTripylerList(@RequestParam int year,
+                                                                       HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(tripylerService.myTripylerWithYear(year, userId));
+        return new ApiResponse<>(tripylerService.myTripylerWithYear(year, userId));
     }
 
     @ApiOperation(value = "My 여행후기들", notes = "내가 작성한 여행후기 목록을 조회합니다.")
     @GetMapping("/my-reviews")
-    HttpRes<List<ReviewRes.MyReviewListDto>> getMyReviewList(@RequestParam int year,
-                                                             HttpServletRequest httpServletRequest) {
+    ApiResponse<List<ReviewRes.MyReviewListDto>> getMyReviewList(@RequestParam int year,
+                                                                 HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(reviewService.myReviewWithYear(year, userId));
+        return new ApiResponse<>(reviewService.myReviewWithYear(year, userId));
     }
 
     @ApiOperation(value = "My Tripyler들 제목 리스트(작성한 것, 참여한 것 전부)", notes = "My Tripyler들(작성한 것, 참여한 것 전부)")
     @GetMapping("/my-all-tripylers")
-    HttpRes<List<TripylerRes.MyTripylerTitleDto>> getAllMyTripylerList(HttpServletRequest httpServletRequest) {
+    ApiResponse<List<TripylerRes.MyTripylerTitleDto>> getAllMyTripylerList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        return new HttpRes<>(tripylerService.myAllTripylers(userId));
+        return new ApiResponse<>(tripylerService.myAllTripylers(userId));
     }
 
 

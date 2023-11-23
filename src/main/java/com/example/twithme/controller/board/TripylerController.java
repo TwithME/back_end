@@ -2,7 +2,7 @@ package com.example.twithme.controller.board;
 
 import com.example.twithme.common.exception.BadRequestException;
 import com.example.twithme.common.exception.NotFoundException;
-import com.example.twithme.common.exception.dto.HttpRes;
+import com.example.twithme.common.model.ApiResponse;
 import com.example.twithme.model.dto.board.TripylerReq;
 import com.example.twithme.model.dto.board.TripylerRes;
 import com.example.twithme.model.entity.board.Tripyler;
@@ -29,10 +29,10 @@ public class TripylerController {
 
     @ApiOperation(value = "게시물 한 개 조회", notes = "게시물 한 개 조회")
     @GetMapping("/{tripylerId}")
-    public HttpRes<TripylerRes.BoardDetailRes> getTripylerBoardDetail(@PathVariable Long tripylerId, HttpServletRequest httpServletRequest) {
+    public ApiResponse<TripylerRes.BoardDetailRes> getTripylerBoardDetail(@PathVariable Long tripylerId, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         TripylerRes.BoardDetailRes result = tripylerService.getTripylerBoardDetail(userId, tripylerId);
-        return new HttpRes<>(result);
+        return new ApiResponse<>(result);
     }
 
     @ApiOperation(value = "모든 모집 게시글 보기(필터링)", notes = "모집중(1), 모집 완료(2) / 최신순(1), 좋아요순(2), 댓글순(3), 조회순(4)")
@@ -44,16 +44,16 @@ public class TripylerController {
 
         //최신순(1), 좋아요순(2), 댓글순(3), 조회순(4)
         if (option == 1) {
-            return new HttpRes<>(tripylerService.getTripylerListOrderByRegDateTime(tripylers));
+            return new ApiResponse<>(tripylerService.getTripylerListOrderByRegDateTime(tripylers));
         }
         else if (option == 2) {
-            return new HttpRes<>(tripylerService.getTripylerListOrderByLikes(tripylers));
+            return new ApiResponse<>(tripylerService.getTripylerListOrderByLikes(tripylers));
         }
         else if (option == 3) {
-            return new HttpRes<>(tripylerService.getTripylerListOrderByComments(tripylers));
+            return new ApiResponse<>(tripylerService.getTripylerListOrderByComments(tripylers));
         }
         else if (option == 4) {
-            return new HttpRes<>(tripylerService.getTripylerListOrderByHits(tripylers));
+            return new ApiResponse<>(tripylerService.getTripylerListOrderByHits(tripylers));
         }
 
         throw new BadRequestException("isRecruiting 또는 option의 값이 유효하지 않습니다.");
@@ -80,20 +80,20 @@ public class TripylerController {
             "  \"totalPeopleNum\": 4\n" +
             "}")
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public HttpRes<String> createTripyler(@RequestPart(name = "tripyler") TripylerReq.TripylerCreateDto tripylerCreateDto,
-                                          @RequestPart(name = "images", required = false) MultipartFile multipartFile,
-                                          HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> createTripyler(@RequestPart(name = "tripyler") TripylerReq.TripylerCreateDto tripylerCreateDto,
+                                              @RequestPart(name = "images", required = false) MultipartFile multipartFile,
+                                              HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         tripylerService.createTripyler(userId, tripylerCreateDto, multipartFile);
-        return new HttpRes<>("게시물 등록이 성공적으로 완료되었습니다.");
+        return new ApiResponse<>("게시물 등록이 성공적으로 완료되었습니다.");
     }
 
     @ApiOperation(value = "여행자 찾기 좋아요 기능", notes = "여행자 찾기 게시물에 좋아요를 누릅니다.")
     @PostMapping("/like")
-    public HttpRes<String> createLike(@RequestBody TripylerReq.TripylerLikeDto tripylerLikeDto, HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> createLike(@RequestBody TripylerReq.TripylerLikeDto tripylerLikeDto, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         tripylerService.like(tripylerLikeDto.getTripylerId(), userId);
-        return new HttpRes<>("좋아요 등록이 성공적으로 완료되었습니다.");
+        return new ApiResponse<>("좋아요 등록이 성공적으로 완료되었습니다.");
     }
 
 //     @GetMapping("")
@@ -104,44 +104,44 @@ public class TripylerController {
 
     @ApiOperation(value = "여행자 찾기 댓글 기능", notes = "여행자 찾기 게시물에 댓글을 작성합니다.")
     @PostMapping("/comment")
-    public HttpRes<String> createComment(@RequestBody TripylerReq.TripylerCommentDto tripylerCommentDto, HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> createComment(@RequestBody TripylerReq.TripylerCommentDto tripylerCommentDto, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         tripylerService.comment(tripylerCommentDto.getTripylerId(), userId, tripylerCommentDto.getContent());
-        return new HttpRes<>("댓글 등록이 성공적으로 완료되었습니다.");
+        return new ApiResponse<>("댓글 등록이 성공적으로 완료되었습니다.");
     }
 
 
     @ApiOperation(value = "트리플러 신청하기", notes = "해당 트리플러 게시물을 신청할 수 있습니다. ")
     @PostMapping("/apply")
-    public HttpRes<String> applyTripyler(@RequestBody TripylerReq.TripylerApplyDto tripylerApplyDto, HttpServletRequest httpServletRequest){
+    public ApiResponse<String> applyTripyler(@RequestBody TripylerReq.TripylerApplyDto tripylerApplyDto, HttpServletRequest httpServletRequest){
         Long userId = userService.getUserId(httpServletRequest);
         Long tripylerId = tripylerApplyDto.getTripylerId();
         String content = tripylerApplyDto.getContent();
         tripylerService.applyTripyler(userId,tripylerId, content);
-        return new HttpRes<>("신청이 완료되었습니다.");
+        return new ApiResponse<>("신청이 완료되었습니다.");
     }
 
     @ApiOperation(value = "신청 내역 보기", notes = "나에게 신청된 내역을 모두 볼 수 있습니다.")
     @GetMapping("/apply")
-    public HttpRes<Map<Long, List<TripylerRes.AppliedListDto>>> getAllAppliedTripyler(HttpServletRequest httpServletRequest) {
+    public ApiResponse<Map<Long, List<TripylerRes.AppliedListDto>>> getAllAppliedTripyler(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         Map<Long, List<TripylerRes.AppliedListDto>> appliedListDtoMap = tripylerService.getAppliedList(userId);
-        return new HttpRes<>(appliedListDtoMap);
+        return new ApiResponse<>(appliedListDtoMap);
     }
 
     @ApiOperation(value = "신청 내역 상세보기", notes="신청된 상세 내역을 확인할 수 있습니다.")
     @GetMapping("/apply/{tripylerApplyId}")
-    public HttpRes<TripylerRes.AppliedDetailDto> getAppliedDetail(@PathVariable Long tripylerApplyId){
+    public ApiResponse<TripylerRes.AppliedDetailDto> getAppliedDetail(@PathVariable Long tripylerApplyId){
         TripylerRes.AppliedDetailDto appliedDetailDto = tripylerService.getAppliedDetail(tripylerApplyId);
-        return new HttpRes<>(appliedDetailDto);
+        return new ApiResponse<>(appliedDetailDto);
     }
 
     @ApiOperation(value ="신청 수락", notes = "나에게 온 신청 수락하기")
     @GetMapping("/apply/accept/{tripylerApplyId}")
-    public HttpRes<String> acceptTripyler(@PathVariable Long tripylerApplyId, HttpServletRequest httpServletRequest){ // 해당 게시물 번호, 로그인한 유저의 정보
+    public ApiResponse<String> acceptTripyler(@PathVariable Long tripylerApplyId, HttpServletRequest httpServletRequest){ // 해당 게시물 번호, 로그인한 유저의 정보
         Long loginUserId = userService.getUserId(httpServletRequest);
         if(tripylerService.acceptTripyler(tripylerApplyId)){
-            return new HttpRes<>("수락하였습니다.");
+            return new ApiResponse<>("수락하였습니다.");
         }
         else{
             throw new NotFoundException("존재하지 않거나 권한이 없는 게시물입니다.");
@@ -150,10 +150,10 @@ public class TripylerController {
 
     @ApiOperation(value ="신청 거절", notes = "나에게 온 신청 거절하기")
     @GetMapping("/apply/refuse/{tripylerApplyId}")
-    public HttpRes<String> refuseTripyler(@PathVariable Long tripylerApplyId, HttpServletRequest httpServletRequest){
+    public ApiResponse<String> refuseTripyler(@PathVariable Long tripylerApplyId, HttpServletRequest httpServletRequest){
         Long userId = userService.getUserId(httpServletRequest);
         if(tripylerService.refuseTripyler(tripylerApplyId)){
-            return new HttpRes<>("거절하였습니다.");
+            return new ApiResponse<>("거절하였습니다.");
         }
         else{
             throw new NotFoundException("존재하지 않거나 권한이 없는 게시물입니다.");
@@ -163,32 +163,32 @@ public class TripylerController {
 
     @ApiOperation(value = "여행자 찾기 댓글 리스트 반환", notes = "여행자 찾기 댓글 리스트 반환")
     @GetMapping("/{tripylerId}/comment/list")
-    public HttpRes<List<TripylerRes.CommentRes>> getComments(@PathVariable Long tripylerId, HttpServletRequest httpServletRequest) {
+    public ApiResponse<List<TripylerRes.CommentRes>> getComments(@PathVariable Long tripylerId, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         List<TripylerRes.CommentRes> result =  tripylerService.getTripylerComments(tripylerId);
-        return new HttpRes<>(result);
+        return new ApiResponse<>(result);
     }
 
     @ApiOperation(value = "여행자 찾기 게시물 수정", notes = "여행자 찾기 게시물을 수정합니다.")
     @PatchMapping("/{tripylerId}")
-    public HttpRes<String> updateTripyler(@PathVariable Long tripylerId,
-                                          @RequestPart TripylerReq.TripylerCreateDto tripylerCreateDto,
-                                          @RequestPart(name = "images", required = false) MultipartFile multipartFile,
-                                          HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> updateTripyler(@PathVariable Long tripylerId,
+                                              @RequestPart TripylerReq.TripylerCreateDto tripylerCreateDto,
+                                              @RequestPart(name = "images", required = false) MultipartFile multipartFile,
+                                              HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         Tripyler tripyler = tripylerService.findUsersTripyler(userId, tripylerId);
         if(tripyler == null) {
             throw new NotFoundException("존재하지 않거나 권한이 없는 게시물입니다.");
         }
         tripylerService.updateTripyler(tripyler, tripylerCreateDto, multipartFile);
-        return new HttpRes<>("게시물 수정이 완료되었습니다.");
+        return new ApiResponse<>("게시물 수정이 완료되었습니다.");
     }
 
     @ApiOperation(value = "여행 지역 검색", notes = "검색한 여행지에 대한 정보를 반환합니다.")
     @GetMapping("/search")
-    public HttpRes<TripylerRes.searchDestinationDto> searchDestination(@RequestParam(name = "regionName") String regionName){
+    public ApiResponse<TripylerRes.searchDestinationDto> searchDestination(@RequestParam(name = "regionName") String regionName){
         TripylerRes.searchDestinationDto searchDestinationDto = tripylerService.searchDestination(regionName);
-        return new HttpRes<>(searchDestinationDto);
+        return new ApiResponse<>(searchDestinationDto);
     }
 
 }

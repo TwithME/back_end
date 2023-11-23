@@ -23,25 +23,17 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
+    private String username; //TODO 카카오 아이디
 
-    private String password;
-
-    private String name;
-
-    @Column(name = "is_name_private")
-    private boolean isNamePrivate;
+    private String name; //TODO 닉네임으로 이름 넣기
 
     private String gender;
 
     private String phone;
 
-    @Column(name = "is_phone_private")
-    private boolean isPhonePrivate;
-
     private String nickname;
 
-    private String email;
+    private String instagram;
 
     @Column(name = "bio_1")
     private String firstBio;
@@ -68,16 +60,8 @@ public class User extends BaseTimeEntity {
     @JoinColumn(name = "mbti_id")
     private Mbti mbti;
 
-    @Column(name = "is_mbti_private")
-    private boolean isMbtiPrivate;
-
     @Column(name = "first_login")
     private boolean firstLogin;
-
-    private String instagram;
-
-    @Column(name = "is_instagram_private")
-    private boolean isInstagramPrivate;
 
     @Column(name = "sns_id")
     private String snsId;
@@ -87,7 +71,5 @@ public class User extends BaseTimeEntity {
 
     @Column(name = "delete_yn")
     private boolean deleteYn;
-
-
 
 }

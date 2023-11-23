@@ -1,4 +1,4 @@
-package com.example.twithme.security;
+package com.example.twithme.config.security;
 
 
 import org.springframework.web.filter.GenericFilterBean;

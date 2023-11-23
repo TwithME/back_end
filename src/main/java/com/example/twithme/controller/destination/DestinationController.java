@@ -1,6 +1,6 @@
 package com.example.twithme.controller.destination;
 
-import com.example.twithme.common.exception.dto.HttpRes;
+import com.example.twithme.common.model.ApiResponse;
 import com.example.twithme.model.dto.destination.DestinationRes;
 import com.example.twithme.model.entity.destination.Continent;
 import com.example.twithme.model.entity.destination.Nation;
@@ -27,7 +27,7 @@ public class DestinationController {
 
     @ApiOperation(value = "대륙보여주기", notes = "대륙 6개를 보여줍니다. ")
     @GetMapping("/continent")
-    public HttpRes<List<DestinationRes.DestinationDto>> getContinentList(){
+    public ApiResponse<List<DestinationRes.DestinationDto>> getContinentList(){
         List<Continent> continents = destinationService.getContinentList();
         List<DestinationRes.DestinationDto> continentDtoList = new ArrayList<>();
 
@@ -39,13 +39,13 @@ public class DestinationController {
             continentDtoList.add(continentListDto);
         }
 
-        return new HttpRes<>(continentDtoList);
+        return new ApiResponse<>(continentDtoList);
 
     }
 
     @ApiOperation(value = "해당 나라들 보여주기", notes = "대륙을 선택하면 해당하는 나라 리스트를 보여줍니다.")
     @GetMapping("/nation")
-    public HttpRes<List<DestinationRes.DestinationDto>> getNationList(@RequestParam(name = "continentId") Long continentId) {
+    public ApiResponse<List<DestinationRes.DestinationDto>> getNationList(@RequestParam(name = "continentId") Long continentId) {
         List<Nation> nations = destinationService.getNationList(continentId);
         List<DestinationRes.DestinationDto> nationDtoList = new ArrayList<>();
 
@@ -57,12 +57,12 @@ public class DestinationController {
             nationDtoList.add(nationDto);
         }
 
-        return new HttpRes<>(nationDtoList);
+        return new ApiResponse<>(nationDtoList);
     }
 
     @ApiOperation(value = "해당 지역들 보여주기", notes = "나라를 선택하면 해당하는 지역 리스트를 보여줍니다.")
     @GetMapping("/region")
-    public HttpRes<List<DestinationRes.DestinationDto>> getRegionList(@RequestParam(name = "nationId") Long nationId) {
+    public ApiResponse<List<DestinationRes.DestinationDto>> getRegionList(@RequestParam(name = "nationId") Long nationId) {
         List<Region> regions = destinationService.getRegionList(nationId);
         List<DestinationRes.DestinationDto> regionDtoList = new ArrayList<>();
 
@@ -74,6 +74,6 @@ public class DestinationController {
             regionDtoList.add(regionDto);
         }
 
-        return new HttpRes<>(regionDtoList);
+        return new ApiResponse<>(regionDtoList);
     }
 }

@@ -1,4 +1,4 @@
-package com.example.twithme.common.service;
+package com.example.twithme.service;
 
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
