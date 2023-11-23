@@ -2,10 +2,7 @@ package com.example.twithme.service.user;
 
 import com.example.twithme.common.exception.BadRequestException;
 import com.example.twithme.common.exception.NotFoundException;
-import com.example.twithme.common.exception.ServerErrorException;
-import com.example.twithme.common.exception.dto.SmsDto;
-import com.example.twithme.common.service.S3Service;
-import com.example.twithme.common.service.SmsService;
+import com.example.twithme.service.S3Service;
 import com.example.twithme.model.dto.user.UserReq;
 import com.example.twithme.model.dto.user.UserRes;
 import com.example.twithme.model.entity.hashtag.Hashtag;
@@ -16,20 +13,16 @@ import com.example.twithme.repository.hashtag.HashtagRepository;
 import com.example.twithme.repository.user.MbtiRepository;
 import com.example.twithme.repository.user.UserHashtagRepository;
 import com.example.twithme.repository.user.UserRepository;
-import com.example.twithme.security.JwtTokenProvider;
+import com.example.twithme.config.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @Service
@@ -42,7 +35,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RestTemplate restTemplate;
-    private final SmsService smsService;
+
     private final S3Service s3Service;
     private final HashtagRepository hashtagRepository;
     private final UserHashtagRepository userHashtagRepository;
@@ -102,8 +95,8 @@ public class UserService {
 
         User user = User.builder()
                 .loginType("kakao")
-                .snsId(snsId)
-                .snsToken(snsToken)
+                //.snsId(snsId)
+                //.snsToken(snsToken)
                 .userRole("ROLE_USER")
                 .firstLogin(true)
                 .build();
@@ -117,7 +110,7 @@ public class UserService {
             user.setName(kakaoSignUpDto.getName());
             user.setBirthDate(kakaoSignUpDto.getBirthDate());
             user.setGender(kakaoSignUpDto.getGender());
-            user.setEmail(kakaoSignUpDto.getEmail());
+            //user.setEmail(kakaoSignUpDto.getEmail());
             user.setFirstLogin(true);
             userRepository.save(user);
         }
@@ -253,11 +246,6 @@ public class UserService {
                 .secondTripStyle(hashtagName.get(1))
                 .thirdTripStyle(hashtagName.get(2))
                 .profileUrl(user.getProfileUrl())
-                .isPhonePrivate(user.isPhonePrivate())
-                .isNamePrivate(user.isNamePrivate())
-                .isInstagramPrivate(user.isInstagramPrivate())
-                .isPhonePrivate(user.isPhonePrivate())
-                .isMbtiPrivate(user.isMbtiPrivate())
                 .build();
     }
 
@@ -288,16 +276,16 @@ public class UserService {
         String mbti = user.getMbti() == null ? null : user.getMbti().getName();
 
         return UserRes.ProfileDto.builder()
-                .name(user.isNamePrivate() ? null : user.getName())
+               // .name(user.isNamePrivate() ? null : user.getName())
                 .username(user.getUsername())
                 .age(age)
-                .instagram(user.isInstagramPrivate() ? null : user.getInstagram())
-                .phone(user.isPhonePrivate() ? null : user.getPhone())
+                //.instagram(user.isInstagramPrivate() ? null : user.getInstagram())
+                //.phone(user.isPhonePrivate() ? null : user.getPhone())
                 .gender(user.getGender())
                 .firstBio(user.getFirstBio())
                 .secondBio(user.getSecondBio())
                 .thirdBio(user.getThirdBio())
-                .mbti(user.isMbtiPrivate() ? null : mbti)
+                //.mbti(user.isMbtiPrivate() ? null : mbti)
                 .firstTripStyle(hashtagName.get(0))
                 .secondTripStyle(hashtagName.get(1))
                 .thirdTripStyle(hashtagName.get(2))

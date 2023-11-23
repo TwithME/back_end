@@ -1,4 +1,4 @@
-package com.example.twithme.security;
+package com.example.twithme.config.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/user/authentication-code/send",
                         "/user/auth/name", "/user/auth/username", "/user/password/change",
                         "/hashtag/*", "/profile/mbti",
-                        "/tripyler/list", "/review/list", "/h2-console/").permitAll()
+                        "/tripyler/list", "/review/list", "/h2-console/**").permitAll()
                 .antMatchers("/user/signup/kakao",
                         "/profile/*", "/profile/**",
                         "/chat/*", "/chat/**",

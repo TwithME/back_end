@@ -42,7 +42,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         userRole.add(user.getUserRole());
         return UserRes.RoleDto.builder()
                 .id(id)
-                .password(user.getPassword())
+                //.password(user.getPassword())
                 .roles(userRole)
                 .build();
     }

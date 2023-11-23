@@ -1,6 +1,6 @@
 package com.example.twithme.controller.hashtag;
 
-import com.example.twithme.common.exception.dto.HttpRes;
+import com.example.twithme.common.model.ApiResponse;
 import com.example.twithme.model.dto.hashtag.HashtagRes;
 import com.example.twithme.service.hashtag.HashtagService;
 import io.swagger.annotations.Api;
@@ -24,14 +24,14 @@ public class HashtagController {
 
     @ApiOperation(value = "해시태그 검색", notes = "해당 키워드를 포함하는 해시태그를 검색합니다.")
     @GetMapping("")
-    public HttpRes<List<HashtagRes.HashtagDto>> getSearchList(@RequestParam String name) {
-        return new HttpRes<>(hashtagService.readHashtagSearchList(name));
+    public ApiResponse<List<HashtagRes.HashtagDto>> getSearchList(@RequestParam String name) {
+        return new ApiResponse<>(hashtagService.readHashtagSearchList(name));
     }
 
     @ApiOperation(value = "해시태그 목록 조회", notes = "모든 해시태그들의 목록을 조회합니다.")
     @GetMapping("/list")
-    public HttpRes<List<HashtagRes.HashtagDto>> getList() {
-        return new HttpRes<>(hashtagService.readHashtagList());
+    public ApiResponse<List<HashtagRes.HashtagDto>> getList() {
+        return new ApiResponse<>(hashtagService.readHashtagList());
     }
 
 //    @ApiOperation(value = "신규 해시태그 등록", notes = "존재하지 않는 해시태그를 새로 등록합니다.")

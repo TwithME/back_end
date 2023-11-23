@@ -1,4 +1,4 @@
-package com.example.twithme.security;
+package com.example.twithme.config.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
