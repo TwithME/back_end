@@ -6,7 +6,7 @@ import com.example.twithme.model.dto.board.ReviewReq;
 import com.example.twithme.model.dto.board.ReviewRes;
 import com.example.twithme.model.entity.board.Review;
 import com.example.twithme.service.board.ReviewService;
-import com.example.twithme.service.board.TripylerService;
+import com.example.twithme.service.board.BoardService;
 import com.example.twithme.service.user.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -23,7 +23,7 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/review", produces = MediaType.APPLICATION_JSON_VALUE)
 public class ReviewController {
-    private final TripylerService tripylerService;
+    private final BoardService boardService;
     private final UserService userService;
 
     private final ReviewService reviewService;

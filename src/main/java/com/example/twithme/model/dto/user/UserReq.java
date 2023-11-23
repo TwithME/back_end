@@ -33,6 +33,12 @@ public class UserReq {
 
         @NotBlank(message = "SNS Token을 입력해주세요.")
         private String snsToken;
+
+        @NotBlank(message = "profile_image을 입력해주세요.")
+        private String profileImage;
+
+        @NotBlank(message = "nickname 입력해주세요. -> 유저이름으로 사용될 것입니다")
+        private String name;
     }
 
     @Data
@@ -52,10 +58,10 @@ public class UserReq {
     @AllArgsConstructor
     @Builder
     public static class KakaoSignUpDto {
-        private String name;
-        private LocalDate birthDate;
         private String gender;
-        private String email;
+        private String phone;
+        private String instagram;
+        private LocalDate birthDate;
     }
 
     @Getter
@@ -87,44 +93,6 @@ public class UserReq {
     }
 
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class FindUserByName {
-        private String name;
-        private String phone;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class FindUserByUsername {
-        private String username;
-        private String phone;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class ChangePassword {
-        private String username;
-        private String newPassword;
-        private String newPasswordCheck;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class MessageDto {
-        private String content;
-        private String senderName;
-        private String recipientName;
-        private LocalDateTime sendTime;
-    }
 
     @Data
     @NoArgsConstructor

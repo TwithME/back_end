@@ -121,15 +121,15 @@ public class ReviewRes {
             }
             return ReviewDetailRes.builder()
                     //트리플러 정보
-                    .tripylerId(r.getTripyler().getId())
-                    .tripylerTitle(r.getTripyler().getTitle())
-                    .tripylerImage(r.getTripyler().getImage())
+                    .tripylerId(r.getBoard().getId())
+                    .tripylerTitle(r.getBoard().getTitle())
+                    .tripylerImage(r.getBoard().getImage())
 //                    .nationName(r.getTripyler().getNation().getName())
 //                    .regionName(r.getTripyler().getRegion().getName())
-                    .recruitPeopleNum(r.getTripyler().getRecruitPeopleNum())
-                    .totalPeopleNum(r.getTripyler().getTotalPeopleNum())
-                    .startDate(r.getTripyler().getStartDate())
-                    .endDate(r.getTripyler().getEndDate())
+                    .recruitPeopleNum(r.getBoard().getRecruitPeopleNum())
+                    .totalPeopleNum(r.getBoard().getTotalPeopleNum())
+                    .startDate(r.getBoard().getStartDate())
+                    .endDate(r.getBoard().getEndDate())
 
                     //리뷰 정보
                     .reviewId(r.getId())

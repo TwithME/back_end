@@ -23,18 +23,44 @@ public class User extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username; //TODO 카카오 아이디
+    @Column(name = "sns_id")
+    private String snsId; //ok
+
+    @Column(name = "sns_token")
+    private String snsToken; //ok
+
+    @Column(name = "login_type")
+    private String loginType; //ok
+
+    @Column(name = "profile_url")
+    private String profileUrl; //ok
 
     private String name; //TODO 닉네임으로 이름 넣기
 
+    @Column(name = "first_login")
+    private boolean firstLogin; //ok
+
+    @Column(name = "user_role")
+    private String userRole; //ok
+
+
+    //추가 입력 받을 정보
     private String gender;
 
     private String phone;
 
-    private String nickname;
-
     private String instagram;
 
+    @Column(name = "birth_date")
+    private LocalDate birthDate;
+
+
+    private String username; //필요없음
+    private String nickname; //필요없음
+
+
+
+    //추후 마이페이지에서 수정할 내용
     @Column(name = "bio_1")
     private String firstBio;
 
@@ -44,30 +70,10 @@ public class User extends BaseTimeEntity {
     @Column(name = "bio_3")
     private String thirdBio;
 
-    @Column(name = "birth_date")
-    private LocalDate birthDate;
-
-    @Column(name = "user_role")
-    private String userRole;
-
-    @Column(name = "login_type")
-    private String loginType;
-
-    @Column(name = "profile_url")
-    private String profileUrl;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mbti_id")
     private Mbti mbti;
 
-    @Column(name = "first_login")
-    private boolean firstLogin;
-
-    @Column(name = "sns_id")
-    private String snsId;
-
-    @Column(name = "sns_token")
-    private String snsToken;
 
     @Column(name = "delete_yn")
     private boolean deleteYn;

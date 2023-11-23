@@ -1,7 +1,7 @@
 package com.example.twithme.model.dto.board;
 
 import com.example.twithme.model.dto.hashtag.HashtagRes;
-import com.example.twithme.model.entity.board.Tripyler;
+import com.example.twithme.model.entity.board.Board;
 import com.example.twithme.model.entity.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-public class TripylerRes {
+public class BoardRes {
 
     // 4개의 DTO가 형식은 모두 같지만 compareTo를 다르게 override 해야하기 때문에 따로 존재
     @Data
@@ -48,10 +48,10 @@ public class TripylerRes {
             return tripylerListOrderByRegDateTime.getRegDateTime().compareTo(this.regDateTime);
         }
 
-        public static TripylerListOrderByRegDateTime toDto(Tripyler tripyler, int likes, int comments, int age, List<String> hashtagList) {
+        public static TripylerListOrderByRegDateTime toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
-                nationName = tripyler.getNation().getName();
+                nationName = board.getNation().getName();
             }
             catch(NullPointerException e) {
                 nationName = null;
@@ -59,38 +59,38 @@ public class TripylerRes {
 
             String regionName;
             try {
-                regionName = tripyler.getRegion().getName();
+                regionName = board.getRegion().getName();
             }
             catch(NullPointerException e) {
                 regionName = null;
             }
             String imageUrl;
-            if(tripyler.getImage() == null) {
-                imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            if(board.getImage() == null) {
+                imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
             }
             else {
-                imageUrl = tripyler.getImage();
+                imageUrl = board.getImage();
             }
 
             return TripylerListOrderByRegDateTime.builder()
-                    .tripylerId(tripyler.getId())
+                    .tripylerId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .title(tripyler.getTitle())
-                    .content(tripyler.getContent())
-                    .recruitPeopleNum(tripyler.getRecruitPeopleNum())
-                    .totalPeopleNum(tripyler.getTotalPeopleNum())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
-                    .nickname(tripyler.getWriter().getNickname())
-                    .profileUrl(tripyler.getWriter().getProfileUrl())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .recruitPeopleNum(board.getRecruitPeopleNum())
+                    .totalPeopleNum(board.getTotalPeopleNum())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
+                    .nickname(board.getWriter().getNickname())
+                    .profileUrl(board.getWriter().getProfileUrl())
                     .age(age)
-                    .regDateTime(tripyler.getRegDateTime())
+                    .regDateTime(board.getRegDateTime())
                     .likes(likes)
                     .comments(comments)
-                    .hits(tripyler.getHits())
+                    .hits(board.getHits())
                     .imageUrl(imageUrl)
-                    .gender(tripyler.getWriter().getGender())
+                    .gender(board.getWriter().getGender())
                     .hashtag(hashtagList)
                     .build();
         }
@@ -133,10 +133,10 @@ public class TripylerRes {
             return 0;
         }
 
-        public static TripylerListOrderByLikes toDto(Tripyler tripyler, int likes, int comments, int age, List<String> hashtagList) {
+        public static TripylerListOrderByLikes toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
-                nationName = tripyler.getNation().getName();
+                nationName = board.getNation().getName();
             }
             catch(NullPointerException e) {
                 nationName = null;
@@ -144,32 +144,32 @@ public class TripylerRes {
 
             String regionName;
             try {
-                regionName = tripyler.getRegion().getName();
+                regionName = board.getRegion().getName();
             }
             catch(NullPointerException e) {
                 regionName = null;
             }
-            String imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
             return TripylerListOrderByLikes.builder()
-                    .tripylerId(tripyler.getId())
+                    .tripylerId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .title(tripyler.getTitle())
-                    .content(tripyler.getContent())
-                    .recruitPeopleNum(tripyler.getRecruitPeopleNum())
-                    .totalPeopleNum(tripyler.getTotalPeopleNum())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
-                    .nickname(tripyler.getWriter().getNickname())
-                    .profileUrl(tripyler.getWriter().getProfileUrl())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .recruitPeopleNum(board.getRecruitPeopleNum())
+                    .totalPeopleNum(board.getTotalPeopleNum())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
+                    .nickname(board.getWriter().getNickname())
+                    .profileUrl(board.getWriter().getProfileUrl())
                     .age(age)
-                    .regDateTime(tripyler.getRegDateTime())
+                    .regDateTime(board.getRegDateTime())
                     .likes(likes)
                     .comments(comments)
-                    .hits(tripyler.getHits())
+                    .hits(board.getHits())
                     .imageUrl(imageUrl)
-                    .gender(tripyler.getWriter().getGender())
+                    .gender(board.getWriter().getGender())
                     .hashtag(hashtagList)
                     .build();
         }
@@ -212,10 +212,10 @@ public class TripylerRes {
             return 0;
         }
 
-        public static TripylerListOrderByComments toDto(Tripyler tripyler, int likes, int comments, int age, List<String> hashtagList) {
+        public static TripylerListOrderByComments toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
-                nationName = tripyler.getNation().getName();
+                nationName = board.getNation().getName();
             }
             catch(NullPointerException e) {
                 nationName = null;
@@ -223,32 +223,32 @@ public class TripylerRes {
 
             String regionName;
             try {
-                regionName = tripyler.getRegion().getName();
+                regionName = board.getRegion().getName();
             }
             catch(NullPointerException e) {
                 regionName = null;
             }
-            String imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
             return TripylerListOrderByComments.builder()
-                    .tripylerId(tripyler.getId())
+                    .tripylerId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .title(tripyler.getTitle())
-                    .content(tripyler.getContent())
-                    .recruitPeopleNum(tripyler.getRecruitPeopleNum())
-                    .totalPeopleNum(tripyler.getTotalPeopleNum())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
-                    .nickname(tripyler.getWriter().getNickname())
-                    .profileUrl(tripyler.getWriter().getProfileUrl())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .recruitPeopleNum(board.getRecruitPeopleNum())
+                    .totalPeopleNum(board.getTotalPeopleNum())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
+                    .nickname(board.getWriter().getNickname())
+                    .profileUrl(board.getWriter().getProfileUrl())
                     .age(age)
-                    .regDateTime(tripyler.getRegDateTime())
+                    .regDateTime(board.getRegDateTime())
                     .likes(likes)
                     .comments(comments)
-                    .hits(tripyler.getHits())
+                    .hits(board.getHits())
                     .imageUrl(imageUrl)
-                    .gender(tripyler.getWriter().getGender())
+                    .gender(board.getWriter().getGender())
                     .hashtag(hashtagList)
                     .build();
         }
@@ -291,10 +291,10 @@ public class TripylerRes {
             return 0;
         }
 
-        public static TripylerListOrderByHits toDto(Tripyler tripyler, int likes, int comments, int age, List<String> hashtagList) {
+        public static TripylerListOrderByHits toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
-                nationName = tripyler.getNation().getName();
+                nationName = board.getNation().getName();
             }
             catch(NullPointerException e) {
                 nationName = null;
@@ -302,32 +302,32 @@ public class TripylerRes {
 
             String regionName;
             try {
-                regionName = tripyler.getRegion().getName();
+                regionName = board.getRegion().getName();
             }
             catch(NullPointerException e) {
                 regionName = null;
             }
-            String imageUrl = regionName == null ? null : tripyler.getRegion().getImageUrl();
+            String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
             return TripylerListOrderByHits.builder()
-                    .tripylerId(tripyler.getId())
+                    .tripylerId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .title(tripyler.getTitle())
-                    .content(tripyler.getContent())
-                    .recruitPeopleNum(tripyler.getRecruitPeopleNum())
-                    .totalPeopleNum(tripyler.getTotalPeopleNum())
-                    .startDate(tripyler.getStartDate())
-                    .endDate(tripyler.getEndDate())
-                    .nickname(tripyler.getWriter().getNickname())
-                    .profileUrl(tripyler.getWriter().getProfileUrl())
+                    .title(board.getTitle())
+                    .content(board.getContent())
+                    .recruitPeopleNum(board.getRecruitPeopleNum())
+                    .totalPeopleNum(board.getTotalPeopleNum())
+                    .startDate(board.getStartDate())
+                    .endDate(board.getEndDate())
+                    .nickname(board.getWriter().getNickname())
+                    .profileUrl(board.getWriter().getProfileUrl())
                     .age(age)
-                    .regDateTime(tripyler.getRegDateTime())
+                    .regDateTime(board.getRegDateTime())
                     .likes(likes)
                     .comments(comments)
-                    .hits(tripyler.getHits())
+                    .hits(board.getHits())
                     .imageUrl(imageUrl)
-                    .gender(tripyler.getWriter().getGender())
+                    .gender(board.getWriter().getGender())
                     .hashtag(hashtagList)
                     .build();
         }
@@ -394,7 +394,7 @@ public class TripylerRes {
 
 
 
-        public static BoardDetailRes toDto(Tripyler t){
+        public static BoardDetailRes toDto(Board t){
             int age;
             User user = t.getWriter();
             if(user.getBirthDate() == null || user.getBirthDate().isEqual(LocalDate.of(1900, 1, 1))) {
