@@ -30,6 +30,7 @@ public class UserReq {
     }
 
 
+    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
@@ -38,6 +39,7 @@ public class UserReq {
         private String phone;
         private String instagram;
         private LocalDate birthDate;
+
     }
 
     @Getter
