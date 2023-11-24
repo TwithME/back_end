@@ -19,7 +19,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "tripyler")
+@Table(name = "board")
 @Where(clause = "delete_yn = 0")
 public class Board extends BaseTimeEntity {
 

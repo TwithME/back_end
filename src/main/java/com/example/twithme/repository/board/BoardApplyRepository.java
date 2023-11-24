@@ -9,14 +9,13 @@ import java.util.List;
 
 public interface BoardApplyRepository extends JpaRepository<BoardApply, Long> {
 
-    List<BoardApply> findByBoardId(Long boardId); // 트리플러 아이디로 신청된 내역들 불러오기
+    List<BoardApply> findByBoardId(Long boardId);
 
+    BoardApply findBoardApplyById(Long id);
 
-    BoardApply findTripylerApplyById(Long id);
     List<BoardApply> findByBoard(Board board);
 
     List<BoardApply> findByBoardAndAccepted(Board board, int accepted);
-
 
     List<BoardApply> findByApplicant(User applicant);
 

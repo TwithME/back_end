@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "tripyler_comment")
+@Table(name = "board_comment")
 @Where(clause = "delete_yn = 0")
 public class BoardComment extends BaseTimeEntity {
 

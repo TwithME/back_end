@@ -38,13 +38,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/user/authentication-code/send",
                         "/user/auth/name", "/user/auth/username", "/user/password/change",
                         "/hashtag/*", "/profile/mbti",
-                        "/tripyler/list", "/review/list", "/h2-console/**").permitAll()
-                .antMatchers("/user/signup/kakao",
+                        "/tripyler/list", "/review/list").permitAll()
+                .antMatchers("/user/signup/kakao", "/oauth/kakao",
                         "/profile/*", "/profile/**",
                         "/chat/*", "/chat/**",
-                        "/tripyler/*", "/tripyler/**",
+                        "/board/*", "/board/**",
                         "/review/*", "/review/**",
-                        "/my-collections/*", "/report/*", "/block/*").authenticated()
+                        "/my-collections/*").authenticated()
                 .antMatchers(HttpMethod.OPTIONS, "/**", "/**/*").permitAll()
                 .and()
                 .exceptionHandling().accessDeniedHandler(new AccessDeniedHandlerImpl())

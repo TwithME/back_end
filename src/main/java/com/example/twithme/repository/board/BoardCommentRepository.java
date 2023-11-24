@@ -11,6 +11,5 @@ import java.util.List;
 public interface BoardCommentRepository extends JpaRepository<BoardComment, Long> {
     int countByBoard(Board board);
 
-
     List<BoardComment> findAllByBoardOrderByRegDateTimeDesc(Board board);
 }

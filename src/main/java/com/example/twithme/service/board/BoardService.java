@@ -249,12 +249,12 @@ public class BoardService {
         return tripylerList;
     }
 
-    public List<BoardLikeRepository.TripylerLikeCount> getTripylerBoardCount() {
-        return boardLikeRepository.countTripylerId();
+    public List<BoardLikeRepository.BoardLikeCount> getTripylerBoardCount() {
+        return boardLikeRepository.countBoardId();
     }
 
-    public List<BoardLikeRepository.TripylerLikeCountWhereIsRecruiting> countTripylerIdWhereIsRecruiting(int isRecruiting) {
-        return boardLikeRepository.countTripylerIdWhereIsRecruiting(isRecruiting);
+    public List<BoardLikeRepository.BoardLikeCountWhereIsRecruiting> countTripylerIdWhereIsRecruiting(int isRecruiting) {
+        return boardLikeRepository.countBoardIdWhereIsRecruiting(isRecruiting);
     }
 
   
@@ -633,7 +633,7 @@ public class BoardService {
     //신청 상세보기
     public BoardRes.AppliedDetailDto getAppliedDetail(Long tripylerApplyId) {
         // 해당 Tripyler 신청 가져오기
-        BoardApply boardApply = boardApplyRepository.findTripylerApplyById(tripylerApplyId);
+        BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
 
         // Tripyler 신청이 존재할 경우에만 실행
         if (boardApply != null) {
@@ -780,7 +780,7 @@ public class BoardService {
 
 
     public boolean acceptTripyler(Long tripylerApplyId){
-        BoardApply boardApply = boardApplyRepository.findTripylerApplyById(tripylerApplyId);
+        BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
 
 
         if (boardApply != null) {
@@ -793,7 +793,7 @@ public class BoardService {
     }
 
     public boolean refuseTripyler(Long tripylerApplyId){
-        BoardApply boardApply = boardApplyRepository.findTripylerApplyById(tripylerApplyId);
+        BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
 
         if (boardApply != null) {
             boardApply.setAccepted(2);

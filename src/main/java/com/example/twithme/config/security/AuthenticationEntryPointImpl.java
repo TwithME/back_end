@@ -22,7 +22,7 @@ public class AuthenticationEntryPointImpl implements AuthenticationEntryPoint {
         httpServletResponse.setStatus(HttpStatus.UNAUTHORIZED.value());
         httpServletResponse.setContentType("application/json");
         httpServletResponse.setCharacterEncoding("utf-8");
-        ApiResponse<String> apiResponse = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "인증에 실패하였습니다.");
-        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(apiResponse));
+        ApiResponse<String> httpRes = new ApiResponse<>(HttpStatus.UNAUTHORIZED.value(), "인증에 실패하였습니다.");
+        httpServletResponse.getWriter().write(objectMapper.writeValueAsString(httpRes));
     }
 }

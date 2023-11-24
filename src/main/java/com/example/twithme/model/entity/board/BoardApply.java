@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "tripyler_apply")
+@Table(name = "board_apply")
 @Where(clause = "delete_yn = 0")
 public class BoardApply extends BaseTimeEntity {
 

@@ -10,11 +10,9 @@ import java.util.List;
 
 @Repository
 public interface BoardHashtagRepository extends JpaRepository<BoardHashtag, Long> {
-
     List<BoardHashtag> findByHashtag(Hashtag hashtag);
 
     List<BoardHashtag> findByBoard(Board board);
 
     BoardHashtag findByBoardAndHashtag_Id(Board board, Long hashtagId);
-
 }
