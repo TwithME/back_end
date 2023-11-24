@@ -19,24 +19,24 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     List<BoardLike> findByBoard(Board board);
 
     //게시물 필터링
-    @Query(value = "SELECT tripyler_id as tripylerId, COUNT(tripyler_id) as cnt FROM tripyler_like GROUP BY tripyler_id ORDER BY cnt DESC",
+    @Query(value = "SELECT board_id as boardId, COUNT(board_id) as cnt FROM board_like GROUP BY board_id ORDER BY cnt DESC",
             nativeQuery = true)
-    List<TripylerLikeCount> countTripylerId();
+    List<BoardLikeCount> countBoardId();
 
-    interface TripylerLikeCount{
-        Long getTripylerId();
+    interface BoardLikeCount {
+        Long getBoardId();
         int getCnt();
     }
 
 
-    @Query(value = "SELECT tripyler_id as tripylerId, COUNT(tripyler_id) as cnt FROM tripyler_like\n" +
-            "                                                            join tripyler t on t.id = tripyler_like.tripyler_id\n" +
-            "                                                            where t.is_recruiting = :isRecruiting\n" +
-            "                                                            GROUP BY tripyler_id ORDER BY cnt DESC",
+    @Query(value = "SELECT board_id as boardId, COUNT(board_id) as cnt FROM board_like\n" +
+            "                                                            join board b on b.id = board_like.board_id\n" +
+            "                                                            where b.is_recruiting = :isRecruiting\n" +
+            "                                                            GROUP BY board_id ORDER BY cnt DESC",
             nativeQuery = true)
-    List<TripylerLikeCountWhereIsRecruiting> countTripylerIdWhereIsRecruiting(int isRecruiting);
+    List<BoardLikeCountWhereIsRecruiting> countBoardIdWhereIsRecruiting(int isRecruiting);
 
-    interface TripylerLikeCountWhereIsRecruiting{
+    interface BoardLikeCountWhereIsRecruiting {
         Long getTripylerId();
         int getCnt();
     }

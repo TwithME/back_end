@@ -14,7 +14,8 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAll();
 
-    List<Board> findTripylersById(Long tripylerId);
+
+//    List<Board> findTripylersById(Long tripylerId);
 
     Board findTripylerById(Long tripylerId);
 
@@ -41,10 +42,10 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     List<Board> findAllByIsRecruitingOrderByHitsDesc(int isRecruiting);
 
     @Modifying
-    @Query(value = "update tripyler set hits = hits + 1 where id = :id",
+    @Query(value = "update board set hits = hits + 1 where id = :id",
             nativeQuery = true)
     void incrementHits(Long id);
-    Board findByWriterAndId(User user, Long tripylerId);
+    Board findByWriterAndId(User user, Long boardId);
 
     @Query(value = "select * from tripyler where writer_id = :userId and YEAR(start_dt) = :year",
             nativeQuery = true)

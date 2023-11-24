@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-@Table(name = "tripyler_hashtag")
+@Table(name = "board_hashtag")
 @Where(clause = "delete_yn = 0")
 public class BoardHashtag extends BaseTimeEntity {
 
