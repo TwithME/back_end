@@ -80,19 +80,19 @@ public class BoardController {
             "  \"totalPeopleNum\": 4\n" +
             "}")
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ApiResponse<String> createTripyler(@RequestPart(name = "tripyler") BoardReq.TripylerCreateDto tripylerCreateDto,
+    public ApiResponse<String> createTripyler(@RequestPart(name = "tripyler") BoardReq.BoardCreateDto boardCreateDto,
                                               @RequestPart(name = "images", required = false) MultipartFile multipartFile,
                                               HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        boardService.createTripyler(userId, tripylerCreateDto, multipartFile);
+        boardService.createTripyler(userId, boardCreateDto, multipartFile);
         return new ApiResponse<>("게시물 등록이 성공적으로 완료되었습니다.");
     }
 
     @ApiOperation(value = "여행자 찾기 좋아요 기능", notes = "여행자 찾기 게시물에 좋아요를 누릅니다.")
     @PostMapping("/like")
-    public ApiResponse<String> createLike(@RequestBody BoardReq.TripylerLikeDto tripylerLikeDto, HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> createLike(@RequestBody BoardReq.BoardLikeDto boardLikeDto, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        boardService.like(tripylerLikeDto.getTripylerId(), userId);
+        boardService.like(boardLikeDto.getBoardId(), userId);
         return new ApiResponse<>("좋아요 등록이 성공적으로 완료되었습니다.");
     }
 
@@ -104,19 +104,19 @@ public class BoardController {
 
     @ApiOperation(value = "여행자 찾기 댓글 기능", notes = "여행자 찾기 게시물에 댓글을 작성합니다.")
     @PostMapping("/comment")
-    public ApiResponse<String> createComment(@RequestBody BoardReq.TripylerCommentDto tripylerCommentDto, HttpServletRequest httpServletRequest) {
+    public ApiResponse<String> createComment(@RequestBody BoardReq.BoardCommentDto boardCommentDto, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
-        boardService.comment(tripylerCommentDto.getTripylerId(), userId, tripylerCommentDto.getContent());
+        boardService.comment(boardCommentDto.getBoardId(), userId, boardCommentDto.getContent());
         return new ApiResponse<>("댓글 등록이 성공적으로 완료되었습니다.");
     }
 
 
     @ApiOperation(value = "트리플러 신청하기", notes = "해당 트리플러 게시물을 신청할 수 있습니다. ")
     @PostMapping("/apply")
-    public ApiResponse<String> applyTripyler(@RequestBody BoardReq.TripylerApplyDto tripylerApplyDto, HttpServletRequest httpServletRequest){
+    public ApiResponse<String> applyTripyler(@RequestBody BoardReq.BoardApplyDto boardApplyDto, HttpServletRequest httpServletRequest){
         Long userId = userService.getUserId(httpServletRequest);
-        Long tripylerId = tripylerApplyDto.getTripylerId();
-        String content = tripylerApplyDto.getContent();
+        Long tripylerId = boardApplyDto.getBoardId();
+        String content = boardApplyDto.getContent();
         boardService.applyTripyler(userId,tripylerId, content);
         return new ApiResponse<>("신청이 완료되었습니다.");
     }
@@ -172,7 +172,7 @@ public class BoardController {
     @ApiOperation(value = "여행자 찾기 게시물 수정", notes = "여행자 찾기 게시물을 수정합니다.")
     @PatchMapping("/{tripylerId}")
     public ApiResponse<String> updateTripyler(@PathVariable Long tripylerId,
-                                              @RequestPart BoardReq.TripylerCreateDto tripylerCreateDto,
+                                              @RequestPart BoardReq.BoardCreateDto boardCreateDto,
                                               @RequestPart(name = "images", required = false) MultipartFile multipartFile,
                                               HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
@@ -180,7 +180,7 @@ public class BoardController {
         if(board == null) {
             throw new NotFoundException("존재하지 않거나 권한이 없는 게시물입니다.");
         }
-        boardService.updateTripyler(board, tripylerCreateDto, multipartFile);
+        boardService.updateTripyler(board, boardCreateDto, multipartFile);
         return new ApiResponse<>("게시물 수정이 완료되었습니다.");
     }
 

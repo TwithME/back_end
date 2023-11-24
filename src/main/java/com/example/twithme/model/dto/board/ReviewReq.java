@@ -11,7 +11,7 @@ public class ReviewReq {
     @AllArgsConstructor
     @Builder
     public static class ReviewCreateDto { //리뷰 생성
-        private Long tripylerId;
+        private Long boardId;
         private String title;
         private String content;
         private String oneLine;

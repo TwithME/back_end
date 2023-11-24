@@ -78,7 +78,7 @@ public class ReviewService {
 
 
     public Long createReview(Long userId, ReviewReq.ReviewCreateDto reviewCreateDto) {
-        Board board = boardService.getTripylerByTripylerId(reviewCreateDto.getTripylerId());
+        Board board = boardService.getTripylerByTripylerId(reviewCreateDto.getBoardId());
         User user = userService.getUserByUserId(userId);
 
         Review review = Review.builder()
@@ -189,7 +189,7 @@ public class ReviewService {
 
 
         //동행한 사람 리스트
-        List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
+        List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
         List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
 
         for(BoardApply boardApply : boardApplyList){
@@ -202,7 +202,7 @@ public class ReviewService {
                     age = LocalDate.now().getYear() - applicant.getBirthDate().getYear() + 1;
                 }
 
-                ReviewRes.TripylerWith e = ReviewRes.TripylerWith.builder()
+                ReviewRes.BoardWith e = ReviewRes.BoardWith.builder()
                         .userId(applicant.getId())
                         .profileUrl(applicant.getProfileUrl())
                         .nickname(applicant.getNickname())
@@ -210,7 +210,7 @@ public class ReviewService {
                         .gender(applicant.getGender())
                         .build();
 
-                tripylerWithList.add(e);
+                boardWithList.add(e);
             }
         }
 
@@ -222,7 +222,7 @@ public class ReviewService {
         result.setLikes(likes);
         result.setCommentsCnt(commentsCnt);
         result.setReviewImageList(reviewImageList);
-        result.setTripylerWithList(tripylerWithList);
+        result.setBoardWithList(boardWithList);
 
         result.setMyReview(review.getWriter().getId().equals(tokenUserId));
 
@@ -314,10 +314,10 @@ public class ReviewService {
         return result;
     }
 
-    public List<BoardRes.MyTripylerApplyListDto> findReviewByLike(Long userId) {
+    public List<BoardRes.MyBoardApplyListDto> findReviewByLike(Long userId) {
         User user = userService.getUserByUserId(userId);
         List<ReviewLike> reviewLikes = reviewLikeRepository.findByUser(user);
-        List<BoardRes.MyTripylerApplyListDto> myTripylerApplyListDtos = new ArrayList<>();
+        List<BoardRes.MyBoardApplyListDto> myBoardApplyListDtos = new ArrayList<>();
 
         for(ReviewLike reviewLike : reviewLikes) {
             Board board = reviewLike.getReview().getBoard();
@@ -337,9 +337,9 @@ public class ReviewService {
                 imageUrl = board.getImage();
             }
 
-            myTripylerApplyListDtos.add(BoardRes.MyTripylerApplyListDto.builder()
+            myBoardApplyListDtos.add(BoardRes.MyBoardApplyListDto.builder()
                             .userId(board.getWriter().getId())
-                            .tripylerId(reviewLike.getReview().getId())
+                            .boardId(reviewLike.getReview().getId())
                             .nationName(nationName)
                             .regionName(regionName)
                             .startDate(board.getStartDate())
@@ -355,7 +355,7 @@ public class ReviewService {
                             .imageUrl(imageUrl)
                             .build());
         }
-        return myTripylerApplyListDtos;
+        return myBoardApplyListDtos;
     }
 
     public List<ReviewRes.MyReviewListDto> myReviewWithYear(int year, Long userId) {
@@ -378,7 +378,7 @@ public class ReviewService {
                     .reviewId(review.getId())
                     .nationName(nationName)
                     .regionName(regionName)
-                    .tripylerTitle(board.getTitle())
+                    .boardTitle(board.getTitle())
                     .reviewTitle(review.getTitle())
                     .likes(boardLikeRepository.countByBoard(board))
                     .comments(boardCommentRepository.countByBoard(board))

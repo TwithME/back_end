@@ -15,18 +15,6 @@ public class UserReq {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class GeneralLogInDto {
-        @NotBlank(message = "ID를 입력해주세요.")
-        private String username;
-
-        @NotBlank(message = "비밀번호를 입력해주세요.")
-        private String password;
-    }
-
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
     public static class KakaoLogInDto {
         @NotBlank(message = "SNS ID를 입력해주세요.")
         private String snsId;
@@ -41,19 +29,7 @@ public class UserReq {
         private String name;
     }
 
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Builder
-    public static class NaverLogInDto {
-        @NotBlank(message = "code를 입력해주세요.")
-        private String code;
 
-        @NotBlank(message = "state를 입력해주세요.")
-        private String state;
-    }
-
-    @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

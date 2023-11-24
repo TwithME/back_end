@@ -35,7 +35,7 @@ public class BoardReq {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerCreateDto {
+    public static class BoardCreateDto {
         //지역
         private Long continentId;
         private Long nationId;
@@ -55,7 +55,7 @@ public class BoardReq {
         private int estimatedPrice;
 
         //동행자 아이디만 문자열로 넣어주면 될 것 같아!
-        List<String> tripylerWithList;
+        List<String> withList;
 
         String title;
         String content;
@@ -65,15 +65,15 @@ public class BoardReq {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerLikeDto {
-        Long tripylerId;
+    public static class BoardLikeDto {
+        Long boardId;
     }
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerCommentDto {
-        Long tripylerId;
+    public static class BoardCommentDto {
+        Long boardId;
         String content;
     }
 
@@ -81,8 +81,8 @@ public class BoardReq {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerApplyDto{
-        Long tripylerId;
+    public static class BoardApplyDto {
+        Long boardId;
         String content;
     }
 

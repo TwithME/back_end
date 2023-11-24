@@ -145,8 +145,8 @@ public class BoardService {
         return returnBoards;
     }
 
-    public List<BoardRes.TripylerListOrderByRegDateTime> getTripylerListOrderByRegDateTime(List<Board> boards) {
-        List<BoardRes.TripylerListOrderByRegDateTime> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByRegDateTime> getTripylerListOrderByRegDateTime(List<Board> boards) {
+        List<BoardRes.BoardListOrderByRegDateTime> tripylerList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -165,14 +165,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.TripylerListOrderByRegDateTime.toDto(board, likes, comments, age, hashtagArray));
+            tripylerList.add(BoardRes.BoardListOrderByRegDateTime.toDto(board, likes, comments, age, hashtagArray));
         }
         Collections.sort(tripylerList);
         return tripylerList;
     }
 
-    public List<BoardRes.TripylerListOrderByLikes> getTripylerListOrderByLikes(List<Board> boards) {
-        List<BoardRes.TripylerListOrderByLikes> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByLikes> getTripylerListOrderByLikes(List<Board> boards) {
+        List<BoardRes.BoardListOrderByLikes> tripylerList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -191,14 +191,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.TripylerListOrderByLikes.toDto(board, likes, comments, age, hashtagArray));
+            tripylerList.add(BoardRes.BoardListOrderByLikes.toDto(board, likes, comments, age, hashtagArray));
         }
         Collections.sort(tripylerList);
         return tripylerList;
     }
 
-    public List<BoardRes.TripylerListOrderByComments> getTripylerListOrderByComments(List<Board> boards) {
-        List<BoardRes.TripylerListOrderByComments> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByComments> getTripylerListOrderByComments(List<Board> boards) {
+        List<BoardRes.BoardListOrderByComments> tripylerList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -217,14 +217,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.TripylerListOrderByComments.toDto(board, likes, comments, age, hashtagArray));
+            tripylerList.add(BoardRes.BoardListOrderByComments.toDto(board, likes, comments, age, hashtagArray));
         }
         Collections.sort(tripylerList);
         return tripylerList;
     }
 
-    public List<BoardRes.TripylerListOrderByHits> getTripylerListOrderByHits(List<Board> boards) {
-        List<BoardRes.TripylerListOrderByHits> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByHits> getTripylerListOrderByHits(List<Board> boards) {
+        List<BoardRes.BoardListOrderByHits> tripylerList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -243,7 +243,7 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.TripylerListOrderByHits.toDto(board, likes, comments, age, hashtagArray));
+            tripylerList.add(BoardRes.BoardListOrderByHits.toDto(board, likes, comments, age, hashtagArray));
         }
         Collections.sort(tripylerList);
         return tripylerList;
@@ -258,20 +258,20 @@ public class BoardService {
     }
 
   
-    public void createTripyler(Long userId, BoardReq.TripylerCreateDto tripylerCreateDto, MultipartFile multipartFile) {
+    public void createTripyler(Long userId, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
         User user = userService.getUserByUserId(userId);
         Continent continent = null;
-        if(tripylerCreateDto.getContinentId() != null) {
-            continent = continentRepository.findContinentById(tripylerCreateDto.getContinentId());
+        if(boardCreateDto.getContinentId() != null) {
+            continent = continentRepository.findContinentById(boardCreateDto.getContinentId());
         }
         Nation nation = null;
-        if (tripylerCreateDto.getNationId() != null) {
-            nation = nationRepository.findNationById(tripylerCreateDto.getNationId());
+        if (boardCreateDto.getNationId() != null) {
+            nation = nationRepository.findNationById(boardCreateDto.getNationId());
         }
 
         Region region = null;
-        if (tripylerCreateDto.getRegionId() != null) {
-            region = regionRepository.findRegionById(tripylerCreateDto.getRegionId());
+        if (boardCreateDto.getRegionId() != null) {
+            region = regionRepository.findRegionById(boardCreateDto.getRegionId());
         }
 
         Board board = Board.builder()
@@ -279,15 +279,15 @@ public class BoardService {
                 .nation(nation)
                 .region(region)
                 .writer(user)
-                .startDate(tripylerCreateDto.getStartDate())
-                .endDate(tripylerCreateDto.getEndDate())
-                .totalPeopleNum(tripylerCreateDto.getTotalPeopleNum())
+                .startDate(boardCreateDto.getStartDate())
+                .endDate(boardCreateDto.getEndDate())
+                .totalPeopleNum(boardCreateDto.getTotalPeopleNum())
 
-                .estimatedPrice(tripylerCreateDto.getEstimatedPrice())
+                .estimatedPrice(boardCreateDto.getEstimatedPrice())
 
 
-                .title(tripylerCreateDto.getTitle())
-                .content(tripylerCreateDto.getContent())
+                .title(boardCreateDto.getTitle())
+                .content(boardCreateDto.getContent())
                 .isRecruiting(1)
 
                 .build();
@@ -298,7 +298,7 @@ public class BoardService {
 
 
         //사전 동행 신청자 추가
-        for(String s : tripylerCreateDto.getTripylerWithList()){
+        for(String s : boardCreateDto.getWithList()){
             User withUser = userRepository.findByUsername(s);
 
             BoardApply boardApply = BoardApply.builder()
@@ -313,32 +313,32 @@ public class BoardService {
 
 
         //해시태그 등록
-        registerTripStyle(board, tripylerCreateDto);
+        registerTripStyle(board, boardCreateDto);
     }
 
-    public void updateTripyler(Board board, BoardReq.TripylerCreateDto tripylerCreateDto, MultipartFile multipartFile) {
+    public void updateTripyler(Board board, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
         Continent continent = null;
-        if(tripylerCreateDto.getContinentId() != null) {
-            continent = continentRepository.findContinentById(tripylerCreateDto.getContinentId());
+        if(boardCreateDto.getContinentId() != null) {
+            continent = continentRepository.findContinentById(boardCreateDto.getContinentId());
         }
         Nation nation = null;
-        if (tripylerCreateDto.getNationId() != null) {
-            nation = nationRepository.findNationById(tripylerCreateDto.getNationId());
+        if (boardCreateDto.getNationId() != null) {
+            nation = nationRepository.findNationById(boardCreateDto.getNationId());
         }
 
         Region region = null;
-        if (tripylerCreateDto.getRegionId() != null) {
-            region = regionRepository.findRegionById(tripylerCreateDto.getRegionId());
+        if (boardCreateDto.getRegionId() != null) {
+            region = regionRepository.findRegionById(boardCreateDto.getRegionId());
         }
         board.setContinent(continent);
         board.setNation(nation);
         board.setRegion(region);
-        board.setStartDate(tripylerCreateDto.getStartDate());
-        board.setEndDate(tripylerCreateDto.getEndDate());
-        board.setTotalPeopleNum(tripylerCreateDto.getTotalPeopleNum());
-        board.setTitle(tripylerCreateDto.getTitle());
-        board.setContent(tripylerCreateDto.getContent());
-        board.setEstimatedPrice(tripylerCreateDto.getEstimatedPrice());
+        board.setStartDate(boardCreateDto.getStartDate());
+        board.setEndDate(boardCreateDto.getEndDate());
+        board.setTotalPeopleNum(boardCreateDto.getTotalPeopleNum());
+        board.setTitle(boardCreateDto.getTitle());
+        board.setContent(boardCreateDto.getContent());
+        board.setEstimatedPrice(boardCreateDto.getEstimatedPrice());
         boardRepository.save(board);
 
 //        String imageUrl = s3Service.uploadImage("tripyler", Long.toString(tripyler.getId()), multipartFile);
@@ -347,9 +347,9 @@ public class BoardService {
 //            tripylerRepository.save(tripyler);
 //        }
 
-        List<Long> newHashtagIds = Arrays.asList(tripylerCreateDto.getFirstTripStyleId(),
-                tripylerCreateDto.getSecondTripStyleId(), tripylerCreateDto.getThirdTripStyleId(),
-                tripylerCreateDto.getFourthTripStyleId(), tripylerCreateDto.getFifthTripStyleId());
+        List<Long> newHashtagIds = Arrays.asList(boardCreateDto.getFirstTripStyleId(),
+                boardCreateDto.getSecondTripStyleId(), boardCreateDto.getThirdTripStyleId(),
+                boardCreateDto.getFourthTripStyleId(), boardCreateDto.getFifthTripStyleId());
 
         List<BoardHashtag> boardHashtagList = boardHashtagRepository.findByBoard(board);
         List<Long> existingHashtagIds = new ArrayList<>();
@@ -389,18 +389,18 @@ public class BoardService {
 
     }
   
-    public void registerTripStyle(Board board, BoardReq.TripylerCreateDto tripylerCreateDto) {
-        if(tripylerCreateDto.getFirstTripStyleId().equals(0L) && tripylerCreateDto.getSecondTripStyleId().equals(0L)
-                &&tripylerCreateDto.getThirdTripStyleId().equals(0L)) {
+    public void registerTripStyle(Board board, BoardReq.BoardCreateDto boardCreateDto) {
+        if(boardCreateDto.getFirstTripStyleId().equals(0L) && boardCreateDto.getSecondTripStyleId().equals(0L)
+                && boardCreateDto.getThirdTripStyleId().equals(0L)) {
             throw new BadRequestException("해시태그를 하나 이상 입력해주세요");
         }
 
         List<Long> tripStyleList = new ArrayList<>();
-        tripStyleList.add(tripylerCreateDto.getFirstTripStyleId());
-        tripStyleList.add(tripylerCreateDto.getSecondTripStyleId());
-        tripStyleList.add(tripylerCreateDto.getThirdTripStyleId());
-        tripStyleList.add(tripylerCreateDto.getFourthTripStyleId());
-        tripStyleList.add(tripylerCreateDto.getFifthTripStyleId());
+        tripStyleList.add(boardCreateDto.getFirstTripStyleId());
+        tripStyleList.add(boardCreateDto.getSecondTripStyleId());
+        tripStyleList.add(boardCreateDto.getThirdTripStyleId());
+        tripStyleList.add(boardCreateDto.getFourthTripStyleId());
+        tripStyleList.add(boardCreateDto.getFifthTripStyleId());
 
         for(Long tripStyleId : tripStyleList) {
             if(tripStyleId.equals(0L)) {
@@ -479,7 +479,7 @@ public class BoardService {
         int commentsCnt = boardCommentRepository.countByBoard(board);
         result.setLikes(likes);
         result.setCommentsCnt(commentsCnt);
-        result.setMyTripyler(board.getWriter().getId().equals(tokenUserId));
+        result.setMyBoard(board.getWriter().getId().equals(tokenUserId));
 
 
 
@@ -505,7 +505,7 @@ public class BoardService {
 
         //이 트리플러에 동행한 사람들
         //동행한 사람 리스트
-        List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
+        List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
         List<BoardApply> boardApplyAcceptedList = boardApplyRepository.findByBoardAndAccepted(board, 1);
 
         for(BoardApply boardApply : boardApplyAcceptedList){
@@ -518,7 +518,7 @@ public class BoardService {
                     age = LocalDate.now().getYear() - applicant.getBirthDate().getYear() + 1;
                 }
 
-                ReviewRes.TripylerWith e = ReviewRes.TripylerWith.builder()
+                ReviewRes.BoardWith e = ReviewRes.BoardWith.builder()
                         .userId(applicant.getId())
                         .profileUrl(applicant.getProfileUrl())
                         .nickname(applicant.getNickname())
@@ -526,11 +526,11 @@ public class BoardService {
                         .gender(applicant.getGender())
                         .build();
 
-                tripylerWithList.add(e);
+                boardWithList.add(e);
             }
         }
 
-        result.setTripylerWithList(tripylerWithList);
+        result.setWithList(boardWithList);
 
 
 
@@ -619,7 +619,7 @@ public class BoardService {
                         .age(age)
                         .gender(boardApply.getApplicant().getGender())
                         .hashtag(hashtagArray)
-                        .tripylerApplyId(boardApply.getId())
+                        .boardApplyId(boardApply.getId())
                         .build();
 
                 Long tripylerId = boardApply.getBoard().getId();
@@ -694,10 +694,10 @@ public class BoardService {
         return boardRepository.findByWriterAndId(user, tripylerId);
     }
 
-    public List<BoardRes.MyTripylerApplyListDto> findTripylerApplyByApplicantId(Long applicantId) {
+    public List<BoardRes.MyBoardApplyListDto> findTripylerApplyByApplicantId(Long applicantId) {
         User applicant = userService.getUserByUserId(applicantId);
         List<BoardApply> boardApplyList = boardApplyRepository.findByApplicant(applicant);
-        List<BoardRes.MyTripylerApplyListDto> myTripylerApplyListDtos = new ArrayList<>();
+        List<BoardRes.MyBoardApplyListDto> myBoardApplyListDtos = new ArrayList<>();
         for(BoardApply boardApply : boardApplyList) {
             Board board = boardApply.getBoard();
 
@@ -716,8 +716,8 @@ public class BoardService {
                 imageUrl = board.getImage();
             }
 
-            myTripylerApplyListDtos.add(BoardRes.MyTripylerApplyListDto.builder()
-                            .tripylerId(board.getId())
+            myBoardApplyListDtos.add(BoardRes.MyBoardApplyListDto.builder()
+                            .boardId(board.getId())
                             .nationName(nationName)
                             .regionName(regionName)
                             .startDate(board.getStartDate())
@@ -733,13 +733,13 @@ public class BoardService {
                             .imageUrl(imageUrl)
                             .build());
         }
-        return myTripylerApplyListDtos;
+        return myBoardApplyListDtos;
     }
 
-    public List<BoardRes.MyTripylerApplyListDto> findTripylerByLike(Long userId) {
+    public List<BoardRes.MyBoardApplyListDto> findTripylerByLike(Long userId) {
         User user = userService.getUserByUserId(userId);
         List<BoardLike> boardLikes = boardLikeRepository.findByUser(user);
-        List<BoardRes.MyTripylerApplyListDto> myTripylerApplyListDtos = new ArrayList<>();
+        List<BoardRes.MyBoardApplyListDto> myBoardApplyListDtos = new ArrayList<>();
         for(BoardLike boardLike : boardLikes) {
             Board board = boardLike.getBoard();
 
@@ -758,8 +758,8 @@ public class BoardService {
                 imageUrl = board.getImage();
             }
 
-            myTripylerApplyListDtos.add(BoardRes.MyTripylerApplyListDto.builder()
-                    .tripylerId(board.getId())
+            myBoardApplyListDtos.add(BoardRes.MyBoardApplyListDto.builder()
+                    .boardId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
                     .startDate(board.getStartDate())
@@ -775,7 +775,7 @@ public class BoardService {
                     .imageUrl(imageUrl)
                     .build());
         }
-        return myTripylerApplyListDtos;
+        return myBoardApplyListDtos;
     }
 
 
@@ -804,8 +804,8 @@ public class BoardService {
         }
     }
 
-    public List<BoardRes.MyTripylerListDto> myTripylerWithYear(int year, Long userId) {
-        List<BoardRes.MyTripylerListDto> myTripylerListDtos = new ArrayList<>();
+    public List<BoardRes.MyBoardListDto> myTripylerWithYear(int year, Long userId) {
+        List<BoardRes.MyBoardListDto> myBoardListDtos = new ArrayList<>();
         List<Board> boards = boardRepository.findByYearAndUserId(year, userId);
         for(Board board : boards) {
             Nation nation = board.getNation();
@@ -821,8 +821,8 @@ public class BoardService {
                 imageUrl = board.getImage();
             }
 
-            myTripylerListDtos.add(BoardRes.MyTripylerListDto.builder()
-                            .tripylerId(board.getId())
+            myBoardListDtos.add(BoardRes.MyBoardListDto.builder()
+                            .boardId(board.getId())
                             .nationName(nationName)
                             .regionName(regionName)
                             .title(board.getTitle())
@@ -837,16 +837,16 @@ public class BoardService {
                             .imageUrl(imageUrl)
                             .build());
         }
-        return myTripylerListDtos;
+        return myBoardListDtos;
 
     }
 
-    public List<BoardRes.MyTripylerTitleDto> myAllTripylers(Long userId){
+    public List<BoardRes.MyBoardTitleDto> myAllTripylers(Long userId){
         User user = userService.getUserByUserId(userId);
         List<Board> boardList = boardRepository.findByWriter(user);
         List<BoardApply> myApplyList = boardApplyRepository.findByApplicantAndAcceptedEquals(user, 1); //내가 신청한 트리플러 리스트
 
-        List<BoardRes.MyTripylerTitleDto> result = new ArrayList<>();
+        List<BoardRes.MyBoardTitleDto> result = new ArrayList<>();
 
 
         //내가 작성한 트리플러 게시글
@@ -858,7 +858,7 @@ public class BoardService {
 
             //내 트리플러에 신청한 사람들
             List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
-            List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
+            List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
 
             for(BoardApply boardApply : boardApplyList){
                 int age;
@@ -871,7 +871,7 @@ public class BoardService {
                 }
 
 
-                ReviewRes.TripylerWith e =ReviewRes.TripylerWith.builder()
+                ReviewRes.BoardWith e = ReviewRes.BoardWith.builder()
                         .userId(applicant.getId())
                         .nickname(applicant.getNickname())
                         .age(age)
@@ -879,18 +879,18 @@ public class BoardService {
                         .gender(applicant.getGender())
                         .build();
 
-                tripylerWithList.add(e);
+                boardWithList.add(e);
             }
 
             //최종반환객체
-            BoardRes.MyTripylerTitleDto e = BoardRes.MyTripylerTitleDto.builder()
-                    .tripylerId(board.getId())
+            BoardRes.MyBoardTitleDto e = BoardRes.MyBoardTitleDto.builder()
+                    .boardId(board.getId())
                     .title(board.getTitle())
                     .nationName(nationName)
                     .regionName(regionName)
                     .startDate(board.getStartDate())
                     .endDate(board.getEndDate())
-                    .tripylerWithList(tripylerWithList)
+                    .withList(boardWithList)
                     .regDateTime(board.getRegDateTime())
                     .build();
 
@@ -909,7 +909,7 @@ public class BoardService {
 
             //내가 신청한 트리플러에 신청한 다른 사람들까지
             List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
-            List<ReviewRes.TripylerWith> tripylerWithList = new ArrayList<>();
+            List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
 
             for(BoardApply boardApply2 : boardApplyList){
                 int age;
@@ -922,7 +922,7 @@ public class BoardService {
                 }
 
 
-                ReviewRes.TripylerWith e =ReviewRes.TripylerWith.builder()
+                ReviewRes.BoardWith e = ReviewRes.BoardWith.builder()
                         .userId(applicant.getId())
                         .nickname(applicant.getNickname())
                         .age(age)
@@ -930,17 +930,17 @@ public class BoardService {
                         .gender(applicant.getGender())
                         .build();
 
-                tripylerWithList.add(e);
+                boardWithList.add(e);
             }
 
-            BoardRes.MyTripylerTitleDto e = BoardRes.MyTripylerTitleDto.builder()
-                    .tripylerId(board.getId())
+            BoardRes.MyBoardTitleDto e = BoardRes.MyBoardTitleDto.builder()
+                    .boardId(board.getId())
                     .title(board.getTitle())
                     .nationName(nationName)
                     .regionName(regionName)
                     .startDate(board.getStartDate())
                     .endDate(board.getEndDate())
-                    .tripylerWithList(tripylerWithList)
+                    .withList(boardWithList)
                     .regDateTime(board.getRegDateTime())
                     .build();
 
