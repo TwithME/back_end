@@ -57,31 +57,31 @@ public class UserController {
     @ApiOperation(value = "카카오 로그인", notes = "카카오 계정으로 로그인을 합니다.")
     @PostMapping("/user/login/kakao")
     public ApiResponse<UserRes.UserInfoWithToken> doKakaoLogIn(@RequestBody UserReq.KakaoLogInDto kakaoLogInDto) {
-        Base64.Decoder decoder = Base64.getUrlDecoder();
-        final String payload = new String(decoder.decode(kakaoLogInDto.getSnsId().split("\\.")[1]));
-        JsonParser jsonParser = new BasicJsonParser();
-        Map<String, Object> jsonArray;
-        try {
-            jsonArray = jsonParser.parseMap(payload);
-        }
-        catch(RuntimeException e) {
-            throw new BadRequestException("Token 값을 parsing 하지 못하였습니다. 관리자에게 문의해주세요.");
-        }
-        if (!jsonArray.containsKey("sub")) {
-            throw new ServerErrorException();
-        }
-        String snsId = jsonArray.get("sub").toString();
+//        Base64.Decoder decoder = Base64.getUrlDecoder();
+//        final String payload = new String(decoder.decode(kakaoLogInDto.getSnsId().split("\\.")[1]));
+//        JsonParser jsonParser = new BasicJsonParser();
+//        Map<String, Object> jsonArray;
+//        try {
+//            jsonArray = jsonParser.parseMap(payload);
+//        }
+//        catch(RuntimeException e) {
+//            throw new BadRequestException("Token 값을 parsing 하지 못하였습니다. 관리자에게 문의해주세요.");
+//        }
+//        if (!jsonArray.containsKey("sub")) {
+//            throw new ServerErrorException();
+//        }
+//        String snsId = jsonArray.get("sub").toString();
 
 
         //카카오 유저 생성
         boolean needsAdditionalSignUp = false;
-        if(!userService.existsSnsUser("kakao", snsId)) {
+        if(!userService.existsSnsUser("kakao", kakaoLogInDto.getSnsId())) {
             userService.doKakaoSignUp(kakaoLogInDto);
             needsAdditionalSignUp = true;
         }
 
         //통합 소셜 로그인
-        UserRes.UserInfoWithToken userInfoWithToken = userService.doSocialLogIn("kakao", snsId);
+        UserRes.UserInfoWithToken userInfoWithToken = userService.doSocialLogIn("kakao", kakaoLogInDto.getSnsId());
         userInfoWithToken.setNeedsAdditionalSignUp(needsAdditionalSignUp);
 
 
