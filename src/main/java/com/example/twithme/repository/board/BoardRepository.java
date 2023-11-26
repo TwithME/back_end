@@ -14,10 +14,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
 
     List<Board> findAll();
 
-
-//    List<Board> findTripylersById(Long tripylerId);
-
-    Board findTripylerById(Long tripylerId);
+    Board findBoardById(Long boardId);
 
     List<Board> findByContinentIdAndNationIdAndRegionId(Long continentId, Long nationId, Long regionId);
 
@@ -32,9 +29,6 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     //최신순
     List<Board> findAllByIsRecruitingOrderByRegDateTimeDesc(int isRecruiting);
 
-    //Tripyler findByTripylerId(Long tripylerId);
-
-
 
     //댓글순
 
@@ -47,7 +41,7 @@ public interface BoardRepository extends JpaRepository<Board, Long> {
     void incrementHits(Long id);
     Board findByWriterAndId(User user, Long boardId);
 
-    @Query(value = "select * from tripyler where writer_id = :userId and YEAR(start_dt) = :year",
+    @Query(value = "select * from board where writer_id = :userId and YEAR(start_dt) = :year",
             nativeQuery = true)
     List<Board> findByYearAndUserId(int year, Long userId);
 }

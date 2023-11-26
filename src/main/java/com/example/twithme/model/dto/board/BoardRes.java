@@ -387,9 +387,9 @@ public class BoardRes {
 
 
         //이전 다음 게시글
-        private Long previousTripylerId;
+        private Long previousBoardId;
         private String previousTitle;
-        private Long nextTripylerId;
+        private Long nextBoardId;
         private String nextTitle;
 
 
@@ -430,9 +430,9 @@ public class BoardRes {
                     .age(age)
                     .gender(user.getGender())
                     //이전 다음 게시글
-                    .previousTripylerId(null)
+                    .previousBoardId(null)
                     .previousTitle(null)
-                    .nextTripylerId(null)
+                    .nextBoardId(null)
                     .nextTitle(null)
 
                     .tokenUserLiked(false)

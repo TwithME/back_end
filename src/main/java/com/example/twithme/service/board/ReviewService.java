@@ -78,7 +78,7 @@ public class ReviewService {
 
 
     public Long createReview(Long userId, ReviewReq.ReviewCreateDto reviewCreateDto) {
-        Board board = boardService.getTripylerByTripylerId(reviewCreateDto.getBoardId());
+        Board board = boardService.getBoardByBoardId(reviewCreateDto.getBoardId());
         User user = userService.getUserByUserId(userId);
 
         Review review = Review.builder()
@@ -473,7 +473,7 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByRegDateTime> getReviewListOrderByRegDateTime(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByRegDateTime> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            Board board = boardRepository.findBoardById(review.getBoard().getId());
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagList = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
@@ -522,7 +522,7 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByLikes> getReviewListOrderByLikes(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByLikes> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            Board board = boardRepository.findBoardById(review.getBoard().getId());
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagList = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
@@ -570,7 +570,7 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByComments> getReviewListOrderByComments(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByComments> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            Board board = boardRepository.findBoardById(review.getBoard().getId());
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagList = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){
@@ -618,7 +618,7 @@ public class ReviewService {
     public List<ReviewRes.ReviewListDtoOrderByHits> getReviewListOrderByHits(List<Review> reviews) {
         List<ReviewRes.ReviewListDtoOrderByHits> reviewList = new ArrayList<>();
         for(Review review: reviews){
-            Board board = boardRepository.findTripylerById(review.getBoard().getId());
+            Board board = boardRepository.findBoardById(review.getBoard().getId());
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagList = new ArrayList<>();
             for (BoardHashtag boardHashtag : boardHashtags){

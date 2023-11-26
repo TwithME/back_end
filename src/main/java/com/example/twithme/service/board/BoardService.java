@@ -71,7 +71,7 @@ public class BoardService {
 
 
 
-    public List<Board> getTripylerList(BoardReq.BoardOptionDto boardOptionDto, int isRecruiting) {
+    public List<Board> getBoardList(BoardReq.BoardOptionDto boardOptionDto, int isRecruiting) {
         Long continentId = boardOptionDto.getContinentId();
 
         List<Board> boards;
@@ -106,18 +106,18 @@ public class BoardService {
             endDate = LocalDate.of(9999,12,31);
         }
         Integer totalNum = boardOptionDto.getTotalPeopleNum();
-        String keyword = boardOptionDto.getKeyWord(); // 해시태그에 트리플러가 포함됨
+        String keyword = boardOptionDto.getKeyWord(); //해시태그에 포함됨
 
         List<Hashtag> hashtags = hashtagRepository.findByNameContains(keyword); // 키워드가 포함된 해시태그 객체를 불러옴
 
-        List<Board> tripylersWithKeyword = new ArrayList<>();
+        List<Board> boardsWithKeyword = new ArrayList<>();
 
-        // 이 해시태그의 아이디로 트리플러 해시태그 레포지토리 접근해서 트리플러 아이디를 가져옴
+        // 이 해시태그의 아이디로 보드 해시태그 레포지토리 접근해서 보드 아이디를 가져옴
         for (Hashtag hashtag : hashtags) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByHashtag(hashtag);
             for (BoardHashtag boardHashtag : boardHashtags) {
                 Board board = boardHashtag.getBoard();
-                tripylersWithKeyword.add(board); // 트리플러 객체를 리스트에 추가
+                boardsWithKeyword.add(board); // 보드 객체를 리스트에 추가
             }
         }
 
@@ -137,7 +137,7 @@ public class BoardService {
                     board.getIsRecruiting() == isRecruiting &&
                     (board.getTitle().contains(keyword) ||
                             board.getContent().contains(keyword) ||
-                            tripylersWithKeyword.contains(board))
+                            boardsWithKeyword.contains(board))
             ) { // 검색어 포함 여부 확인
                 returnBoards.add(board);
             }
@@ -145,8 +145,8 @@ public class BoardService {
         return returnBoards;
     }
 
-    public List<BoardRes.BoardListOrderByRegDateTime> getTripylerListOrderByRegDateTime(List<Board> boards) {
-        List<BoardRes.BoardListOrderByRegDateTime> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByRegDateTime> getBoardListOrderByRegDateTime(List<Board> boards) {
+        List<BoardRes.BoardListOrderByRegDateTime> boardList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -165,14 +165,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.BoardListOrderByRegDateTime.toDto(board, likes, comments, age, hashtagArray));
+            boardList.add(BoardRes.BoardListOrderByRegDateTime.toDto(board, likes, comments, age, hashtagArray));
         }
-        Collections.sort(tripylerList);
-        return tripylerList;
+        Collections.sort(boardList);
+        return boardList;
     }
 
-    public List<BoardRes.BoardListOrderByLikes> getTripylerListOrderByLikes(List<Board> boards) {
-        List<BoardRes.BoardListOrderByLikes> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByLikes> getBoardListOrderByLikes(List<Board> boards) {
+        List<BoardRes.BoardListOrderByLikes> boardList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -191,14 +191,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.BoardListOrderByLikes.toDto(board, likes, comments, age, hashtagArray));
+            boardList.add(BoardRes.BoardListOrderByLikes.toDto(board, likes, comments, age, hashtagArray));
         }
-        Collections.sort(tripylerList);
-        return tripylerList;
+        Collections.sort(boardList);
+        return boardList;
     }
 
-    public List<BoardRes.BoardListOrderByComments> getTripylerListOrderByComments(List<Board> boards) {
-        List<BoardRes.BoardListOrderByComments> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByComments> getBoardListOrderByComments(List<Board> boards) {
+        List<BoardRes.BoardListOrderByComments> boardList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -217,14 +217,14 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.BoardListOrderByComments.toDto(board, likes, comments, age, hashtagArray));
+            boardList.add(BoardRes.BoardListOrderByComments.toDto(board, likes, comments, age, hashtagArray));
         }
-        Collections.sort(tripylerList);
-        return tripylerList;
+        Collections.sort(boardList);
+        return boardList;
     }
 
-    public List<BoardRes.BoardListOrderByHits> getTripylerListOrderByHits(List<Board> boards) {
-        List<BoardRes.BoardListOrderByHits> tripylerList = new ArrayList<>();
+    public List<BoardRes.BoardListOrderByHits> getBoardListOrderByHits(List<Board> boards) {
+        List<BoardRes.BoardListOrderByHits> boardList = new ArrayList<>();
         for (Board board : boards) {
             List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
             List<String> hashtagArray = new ArrayList<>();
@@ -243,22 +243,22 @@ public class BoardService {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
 
-            tripylerList.add(BoardRes.BoardListOrderByHits.toDto(board, likes, comments, age, hashtagArray));
+            boardList.add(BoardRes.BoardListOrderByHits.toDto(board, likes, comments, age, hashtagArray));
         }
-        Collections.sort(tripylerList);
-        return tripylerList;
+        Collections.sort(boardList);
+        return boardList;
     }
 
-    public List<BoardLikeRepository.BoardLikeCount> getTripylerBoardCount() {
-        return boardLikeRepository.countBoardId();
-    }
-
-    public List<BoardLikeRepository.BoardLikeCountWhereIsRecruiting> countTripylerIdWhereIsRecruiting(int isRecruiting) {
-        return boardLikeRepository.countBoardIdWhereIsRecruiting(isRecruiting);
-    }
+//    public List<BoardLikeRepository.BoardLikeCount> getBoardCount() {
+//        return boardLikeRepository.countBoardId();
+//    }
+//
+//    public List<BoardLikeRepository.BoardLikeCountWhereIsRecruiting> countBoardIdWhereIsRecruiting(int isRecruiting) {
+//        return boardLikeRepository.countBoardIdWhereIsRecruiting(isRecruiting);
+//    }
 
   
-    public void createTripyler(Long userId, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
+    public void createBoard(Long userId, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
         User user = userService.getUserByUserId(userId);
         Continent continent = null;
         if(boardCreateDto.getContinentId() != null) {
@@ -316,7 +316,7 @@ public class BoardService {
         registerTripStyle(board, boardCreateDto);
     }
 
-    public void updateTripyler(Board board, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
+    public void updateBoard(Board board, BoardReq.BoardCreateDto boardCreateDto, MultipartFile multipartFile) {
         Continent continent = null;
         if(boardCreateDto.getContinentId() != null) {
             continent = continentRepository.findContinentById(boardCreateDto.getContinentId());
@@ -419,12 +419,12 @@ public class BoardService {
         }
     }
 
-    public void like(Long tripylerId, Long userId) {
+    public void like(Long boardId, Long userId) {
         User user = userService.getUserByUserId(userId);
-        Board board = getTripylerByTripylerId(tripylerId);
-        Optional<BoardLike> optionalTripylerLike = Optional.ofNullable(boardLikeRepository.findByBoardAndUser(board, user));
-        if(optionalTripylerLike.isPresent()) {
-            BoardLike boardLike = optionalTripylerLike.get();
+        Board board = getBoardByBoardId(boardId);
+        Optional<BoardLike> optionalBoardLike = Optional.ofNullable(boardLikeRepository.findByBoardAndUser(board, user));
+        if(optionalBoardLike.isPresent()) {
+            BoardLike boardLike = optionalBoardLike.get();
             boardLike.setDeleteYn(true);
         }
         else {
@@ -436,9 +436,9 @@ public class BoardService {
         }
     }
 
-    public void comment(Long tripylerId, Long userId, String content) {
+    public void comment(Long boardId, Long userId, String content) {
         User user = userService.getUserByUserId(userId);
-        Board board = getTripylerByTripylerId(tripylerId);
+        Board board = getBoardByBoardId(boardId);
         BoardComment boardComment = BoardComment.builder()
                 .board(board)
                 .commenter(user)
@@ -447,16 +447,16 @@ public class BoardService {
         boardCommentRepository.save(boardComment);
     }
 
-    public Board getTripylerByTripylerId(Long tripylerId) {
-        Optional<Board> optionalTripyler = boardRepository.findById(tripylerId);
-        if(optionalTripyler.isEmpty()) {
+    public Board getBoardByBoardId(Long boardId) {
+        Optional<Board> optionalBoard = boardRepository.findById(boardId);
+        if(optionalBoard.isEmpty()) {
             throw new NotFoundException("존재하지 않는 게시물입니다.");
         }
-        return optionalTripyler.get();
+        return optionalBoard.get();
     }
 
-    public BoardRes.BoardDetailRes getTripylerBoardDetail(Long tokenUserId, Long tripylerId) {
-        Board board = getTripylerByTripylerId(tripylerId);
+    public BoardRes.BoardDetailRes getBoardDetail(Long tokenUserId, Long boardId) {
+        Board board = getBoardByBoardId(boardId);
         List<BoardHashtag> boardHashtags = boardHashtagRepository.findByBoard(board);
 
 
@@ -474,7 +474,7 @@ public class BoardService {
 
 
 
-        //좋아요, 댓글수, 내가 작성한 트리플러인지
+        //좋아요, 댓글수, 내가 작성한 글인지
         int likes = boardLikeRepository.countByBoard(board);
         int commentsCnt = boardCommentRepository.countByBoard(board);
         result.setLikes(likes);
@@ -503,7 +503,6 @@ public class BoardService {
         result.setHashtagList(hashtagList);
 
 
-        //이 트리플러에 동행한 사람들
         //동행한 사람 리스트
         List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
         List<BoardApply> boardApplyAcceptedList = boardApplyRepository.findByBoardAndAccepted(board, 1);
@@ -539,21 +538,21 @@ public class BoardService {
         for(Board t : boardList){
             int nowIdx = boardList.indexOf(t);
 
-            if(t.getId().equals(tripylerId)){
+            if(t.getId().equals(boardId)){
                 if(nowIdx == 0){
                     Board next = boardList.get(nowIdx+1);
-                    result.setNextTripylerId(next.getId());
+                    result.setNextBoardId(next.getId());
                     result.setNextTitle(next.getTitle());
                 } else if(nowIdx == boardList.size()-1){
                     Board previous = boardList.get(nowIdx-1);
-                    result.setPreviousTripylerId(previous.getId());
+                    result.setPreviousBoardId(previous.getId());
                     result.setPreviousTitle(previous.getTitle());
                 } else{
                     Board previous = boardList.get(nowIdx-1);
                     Board next = boardList.get(nowIdx+1);
-                    result.setPreviousTripylerId(previous.getId());
+                    result.setPreviousBoardId(previous.getId());
                     result.setPreviousTitle(previous.getTitle());
-                    result.setNextTripylerId(next.getId());
+                    result.setNextBoardId(next.getId());
                     result.setNextTitle(next.getTitle());
                 }
                 break;
@@ -567,7 +566,7 @@ public class BoardService {
 
 
         //조회수 증가
-        boardRepository.incrementHits(tripylerId);
+        boardRepository.incrementHits(boardId);
 
 
 
@@ -576,9 +575,9 @@ public class BoardService {
     }
 
   
-    public void applyTripyler(Long userId, Long tripylerId, String content){
+    public void applyBoard(Long userId, Long tripylerId, String content){
         User user = userService.getUserByUserId(userId);
-        Board board = getTripylerByTripylerId(tripylerId);
+        Board board = getBoardByBoardId(tripylerId);
         BoardApply boardApply = BoardApply.builder()
                 .board(board)
                 .applicant(user)
@@ -672,9 +671,9 @@ public class BoardService {
 
 
 
-    public List<BoardRes.CommentRes> getTripylerComments(Long tripylerId) {
+    public List<BoardRes.CommentRes> getBoardComments(Long tripylerId) {
         List<BoardRes.CommentRes> result = new ArrayList<>();
-        Board board = getTripylerByTripylerId(tripylerId);
+        Board board = getBoardByBoardId(tripylerId);
         List<BoardComment> boardComments = boardCommentRepository.findAllByBoardOrderByRegDateTimeDesc(board);
 
         for(BoardComment boardComment : boardComments){
@@ -689,12 +688,12 @@ public class BoardService {
         return result;
     }
 
-    public Board findUsersTripyler(Long userId, Long tripylerId) {
+    public Board findUsersBoard(Long userId, Long boardId) {
         User user = userService.getUserByUserId(userId);
-        return boardRepository.findByWriterAndId(user, tripylerId);
+        return boardRepository.findByWriterAndId(user, boardId);
     }
 
-    public List<BoardRes.MyBoardApplyListDto> findTripylerApplyByApplicantId(Long applicantId) {
+    public List<BoardRes.MyBoardApplyListDto> findBoardApplyByApplicantId(Long applicantId) {
         User applicant = userService.getUserByUserId(applicantId);
         List<BoardApply> boardApplyList = boardApplyRepository.findByApplicant(applicant);
         List<BoardRes.MyBoardApplyListDto> myBoardApplyListDtos = new ArrayList<>();
@@ -736,7 +735,7 @@ public class BoardService {
         return myBoardApplyListDtos;
     }
 
-    public List<BoardRes.MyBoardApplyListDto> findTripylerByLike(Long userId) {
+    public List<BoardRes.MyBoardApplyListDto> findBoardByLike(Long userId) {
         User user = userService.getUserByUserId(userId);
         List<BoardLike> boardLikes = boardLikeRepository.findByUser(user);
         List<BoardRes.MyBoardApplyListDto> myBoardApplyListDtos = new ArrayList<>();
@@ -779,8 +778,8 @@ public class BoardService {
     }
 
 
-    public boolean acceptTripyler(Long tripylerApplyId){
-        BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
+    public boolean acceptBoard(Long boardApplyId){
+        BoardApply boardApply = boardApplyRepository.findBoardApplyById(boardApplyId);
 
 
         if (boardApply != null) {
@@ -792,8 +791,8 @@ public class BoardService {
         }
     }
 
-    public boolean refuseTripyler(Long tripylerApplyId){
-        BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
+    public boolean refuseBoard(Long boardApplyId){
+        BoardApply boardApply = boardApplyRepository.findBoardApplyById(boardApplyId);
 
         if (boardApply != null) {
             boardApply.setAccepted(2);
@@ -804,7 +803,7 @@ public class BoardService {
         }
     }
 
-    public List<BoardRes.MyBoardListDto> myTripylerWithYear(int year, Long userId) {
+    public List<BoardRes.MyBoardListDto> myBoardWithYear(int year, Long userId) {
         List<BoardRes.MyBoardListDto> myBoardListDtos = new ArrayList<>();
         List<Board> boards = boardRepository.findByYearAndUserId(year, userId);
         for(Board board : boards) {
@@ -841,22 +840,22 @@ public class BoardService {
 
     }
 
-    public List<BoardRes.MyBoardTitleDto> myAllTripylers(Long userId){
+    public List<BoardRes.MyBoardTitleDto> myAllBoards(Long userId){
         User user = userService.getUserByUserId(userId);
         List<Board> boardList = boardRepository.findByWriter(user);
-        List<BoardApply> myApplyList = boardApplyRepository.findByApplicantAndAcceptedEquals(user, 1); //내가 신청한 트리플러 리스트
+        List<BoardApply> myApplyList = boardApplyRepository.findByApplicantAndAcceptedEquals(user, 1); //내가 신청한 리스트
 
         List<BoardRes.MyBoardTitleDto> result = new ArrayList<>();
 
 
-        //내가 작성한 트리플러 게시글
+        //내가 작성한 게시글
         for(Board board : boardList){
             Nation nation = board.getNation();
             String nationName = nation != null ? nation.getName() : null;
             Region region = board.getRegion();
             String regionName = region != null ? region.getName() : null;
 
-            //내 트리플러에 신청한 사람들
+            //신청한 사람들
             List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
             List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
 
@@ -898,7 +897,7 @@ public class BoardService {
         }
 
 
-        //내가 신청한 트리플러 리스트
+        //내가 신청한 리스트
         for(BoardApply boardApply : myApplyList){
             Board board = boardApply.getBoard();
             Nation nation = board.getNation();
@@ -907,7 +906,7 @@ public class BoardService {
             String regionName = region != null ? region.getName() : null;
 
 
-            //내가 신청한 트리플러에 신청한 다른 사람들까지
+            //내가 신청한 글에 신청한 다른 사람들까지
             List<BoardApply> boardApplyList = boardApplyRepository.findByBoard(board);
             List<ReviewRes.BoardWith> boardWithList = new ArrayList<>();
 
