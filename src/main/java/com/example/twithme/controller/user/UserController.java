@@ -13,13 +13,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Base64;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -36,8 +39,24 @@ public class UserController {
             notes = "")
     @GetMapping("/oauth/kakao")
     public ApiResponse<UserReq.KakaoLogInDto> getAccessTokenKakao(@RequestParam String code) {
-        String accessTokenFromSocial = userService.getKakaoAccessToken(code);
-        UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
+        //String accessTokenFromSocial = userService.getKakaoAccessToken(code);
+
+
+        String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
+        RestTemplate restTemplate=new RestTemplate();
+        Map<String, Object> params = new HashMap<>();
+        System.out.println("code = "+code);
+        params.put("code", code);
+        params.put("client_id", "0f8b7cf617336b262bd00ba6ed4f7805");
+        params.put("redirect_uri", "http://semtle.catholic.ac.kr:8081/oauth/kakao");
+        params.put("grant_type", "authorization_code");
+        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(KAKAO_TOKEN_REQUEST_URL, params, String.class);
+        System.out.println(stringResponseEntity);
+
+
+
+        UserReq.KakaoLogInDto kakaoLogInDto = null;
+                //userService.createAndLoginKakaoUser(accessTokenFromSocial);
 
         return new ApiResponse<>(kakaoLogInDto);
     }
