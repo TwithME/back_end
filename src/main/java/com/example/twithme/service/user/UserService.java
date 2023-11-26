@@ -374,7 +374,7 @@ public class UserService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=" + "db83444fceb2cd72e91f38e02179e061");
-            sb.append("&redirect_uri=" + "http://localhost:8081/oauth/kakao");
+            sb.append("&redirect_uri=" + "http://semtle.catholic.ac.kr:8081/oauth/kakao");
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
