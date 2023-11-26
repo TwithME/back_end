@@ -19,9 +19,9 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerListOrderByRegDateTime implements Comparable<TripylerListOrderByRegDateTime> {
+    public static class BoardListOrderByRegDateTime implements Comparable<BoardListOrderByRegDateTime> {
         // 검색 조건에 맞는 게시물들 보여주는 dto
-        private Long tripylerId;
+        private Long boardId;
         private String nationName;
         private String regionName;
         private Integer recruitPeopleNum;
@@ -44,11 +44,11 @@ public class BoardRes {
         private List<String> hashtag;
 
         @Override
-        public int compareTo(TripylerListOrderByRegDateTime tripylerListOrderByRegDateTime) {
-            return tripylerListOrderByRegDateTime.getRegDateTime().compareTo(this.regDateTime);
+        public int compareTo(BoardListOrderByRegDateTime boardListOrderByRegDateTime) {
+            return boardListOrderByRegDateTime.getRegDateTime().compareTo(this.regDateTime);
         }
 
-        public static TripylerListOrderByRegDateTime toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
+        public static BoardListOrderByRegDateTime toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
                 nationName = board.getNation().getName();
@@ -72,8 +72,8 @@ public class BoardRes {
                 imageUrl = board.getImage();
             }
 
-            return TripylerListOrderByRegDateTime.builder()
-                    .tripylerId(board.getId())
+            return BoardListOrderByRegDateTime.builder()
+                    .boardId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
                     .title(board.getTitle())
@@ -100,8 +100,8 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerListOrderByLikes implements Comparable<TripylerListOrderByLikes> {
-        private Long tripylerId;
+    public static class BoardListOrderByLikes implements Comparable<BoardListOrderByLikes> {
+        private Long boardId;
         private String nationName;
         private String regionName;
         private Integer recruitPeopleNum;
@@ -123,17 +123,17 @@ public class BoardRes {
         private List<String> hashtag;
 
         @Override
-        public int compareTo(TripylerListOrderByLikes tripylerListOrderByLikes) {
-            if(this.likes > tripylerListOrderByLikes.getLikes()) {
+        public int compareTo(BoardListOrderByLikes boardListOrderByLikes) {
+            if(this.likes > boardListOrderByLikes.getLikes()) {
                 return -1;
             }
-            else if(this.likes < tripylerListOrderByLikes.getLikes()) {
+            else if(this.likes < boardListOrderByLikes.getLikes()) {
                 return 1;
             }
             return 0;
         }
 
-        public static TripylerListOrderByLikes toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
+        public static BoardListOrderByLikes toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
                 nationName = board.getNation().getName();
@@ -151,8 +151,8 @@ public class BoardRes {
             }
             String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
-            return TripylerListOrderByLikes.builder()
-                    .tripylerId(board.getId())
+            return BoardListOrderByLikes.builder()
+                    .boardId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
                     .title(board.getTitle())
@@ -179,8 +179,8 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerListOrderByComments implements Comparable<TripylerListOrderByComments> {
-        private Long tripylerId;
+    public static class BoardListOrderByComments implements Comparable<BoardListOrderByComments> {
+        private Long boardId;
         private String nationName;
         private String regionName;
         private Integer recruitPeopleNum;
@@ -202,17 +202,17 @@ public class BoardRes {
         private List<String> hashtag;
 
         @Override
-        public int compareTo(TripylerListOrderByComments tripylerListOrderByComments) {
-            if(this.comments > tripylerListOrderByComments.getComments()) {
+        public int compareTo(BoardListOrderByComments boardListOrderByComments) {
+            if(this.comments > boardListOrderByComments.getComments()) {
                 return -1;
             }
-            else if(this.comments < tripylerListOrderByComments.getComments()) {
+            else if(this.comments < boardListOrderByComments.getComments()) {
                 return 1;
             }
             return 0;
         }
 
-        public static TripylerListOrderByComments toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
+        public static BoardListOrderByComments toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
                 nationName = board.getNation().getName();
@@ -230,8 +230,8 @@ public class BoardRes {
             }
             String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
-            return TripylerListOrderByComments.builder()
-                    .tripylerId(board.getId())
+            return BoardListOrderByComments.builder()
+                    .boardId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
                     .title(board.getTitle())
@@ -258,8 +258,8 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerListOrderByHits implements Comparable<TripylerListOrderByHits> {
-        private Long tripylerId;
+    public static class BoardListOrderByHits implements Comparable<BoardListOrderByHits> {
+        private Long boardId;
         private String nationName;
         private String regionName;
         private Integer recruitPeopleNum;
@@ -281,17 +281,17 @@ public class BoardRes {
         private List<String> hashtag;
 
         @Override
-        public int compareTo(TripylerListOrderByHits tripylerListOrderByHits) {
-            if(this.hits > tripylerListOrderByHits.getHits()) {
+        public int compareTo(BoardListOrderByHits boardListOrderByHits) {
+            if(this.hits > boardListOrderByHits.getHits()) {
                 return -1;
             }
-            else if(this.hits < tripylerListOrderByHits.getHits()) {
+            else if(this.hits < boardListOrderByHits.getHits()) {
                 return 1;
             }
             return 0;
         }
 
-        public static TripylerListOrderByHits toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
+        public static BoardListOrderByHits toDto(Board board, int likes, int comments, int age, List<String> hashtagList) {
             String nationName;
             try {
                 nationName = board.getNation().getName();
@@ -309,8 +309,8 @@ public class BoardRes {
             }
             String imageUrl = regionName == null ? null : board.getRegion().getImageUrl();
 
-            return TripylerListOrderByHits.builder()
-                    .tripylerId(board.getId())
+            return BoardListOrderByHits.builder()
+                    .boardId(board.getId())
                     .nationName(nationName)
                     .regionName(regionName)
                     .title(board.getTitle())
@@ -342,13 +342,13 @@ public class BoardRes {
     public static class BoardDetailRes {
 
         //트리플러 정보
-        private Long tripylerId;
+        private Long boardId;
         private String title;
         private String content;
         private String image;
         private String nationName;
         private String regionName;
-        private String tripylerImage;
+        private String boardImage;
 
         private int estimatedPrice;
         private Integer recruitPeopleNum;
@@ -362,7 +362,7 @@ public class BoardRes {
         private Integer commentsCnt; //댓글수
 
         //내가 작성한 트리플러인지
-        private boolean isMyTripyler;
+        private boolean isMyBoard;
 
         //해시태그 리스트
         private List<HashtagRes.HashtagDto> hashtagList;
@@ -371,7 +371,7 @@ public class BoardRes {
 
 
         //동행 리스트
-        List<ReviewRes.TripylerWith> tripylerWithList;
+        List<ReviewRes.BoardWith> withList;
 
 
         //작성자 정보
@@ -387,9 +387,9 @@ public class BoardRes {
 
 
         //이전 다음 게시글
-        private Long previousTripylerId;
+        private Long previousBoardId;
         private String previousTitle;
-        private Long nextTripylerId;
+        private Long nextBoardId;
         private String nextTitle;
 
 
@@ -403,13 +403,13 @@ public class BoardRes {
                 age = LocalDate.now().getYear() - user.getBirthDate().getYear() + 1;
             }
             return BoardDetailRes.builder()
-                    .tripylerId(t.getId())
+                    .boardId(t.getId())
                     .title(t.getTitle())
                     .content(t.getContent())
                     .image(t.getImage())
                     .nationName(null)
                     .regionName(null)
-                    .tripylerImage(t.getImage())
+                    .boardImage(t.getImage())
                     .recruitPeopleNum(t.getRecruitPeopleNum())
                     .totalPeopleNum(t.getTotalPeopleNum())
                     .startDate(t.getStartDate())
@@ -430,9 +430,9 @@ public class BoardRes {
                     .age(age)
                     .gender(user.getGender())
                     //이전 다음 게시글
-                    .previousTripylerId(null)
+                    .previousBoardId(null)
                     .previousTitle(null)
-                    .nextTripylerId(null)
+                    .nextBoardId(null)
                     .nextTitle(null)
 
                     .tokenUserLiked(false)
@@ -455,7 +455,7 @@ public class BoardRes {
         private int age;
         private String gender;
         private List<String> hashtag;
-        private Long tripylerApplyId;
+        private Long boardApplyId;
     }
 
 
@@ -489,9 +489,9 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class MyTripylerApplyListDto {
+    public static class MyBoardApplyListDto {
         private Long userId;
-        private Long tripylerId;
+        private Long boardId;
         private String nationName;
         private String regionName;
         private LocalDate startDate;
@@ -511,8 +511,8 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class MyTripylerListDto {
-        private Long tripylerId;
+    public static class MyBoardListDto {
+        private Long boardId;
         private String nationName;
         private String regionName;
         private String title;
@@ -531,8 +531,8 @@ public class BoardRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class MyTripylerTitleDto implements Comparable<MyTripylerTitleDto>{
-        private Long tripylerId;
+    public static class MyBoardTitleDto implements Comparable<MyBoardTitleDto>{
+        private Long boardId;
         private String title;
 
         //여행지, 여행일정, 동행 트리플러 목록도
@@ -541,13 +541,13 @@ public class BoardRes {
         private LocalDate startDate;
         private LocalDate endDate;
 
-        List<ReviewRes.TripylerWith> tripylerWithList;
+        List<ReviewRes.BoardWith> withList;
 
         private LocalDateTime regDateTime; //등록시간
 
 
         @Override
-        public int compareTo(MyTripylerTitleDto tripylerTitleDto) {
+        public int compareTo(MyBoardTitleDto tripylerTitleDto) {
               return tripylerTitleDto.getRegDateTime().compareTo(this.regDateTime);
         }
 

@@ -60,7 +60,7 @@ public class ReviewController {
 
     @ApiOperation(value = "리뷰 한 개 조회", notes = "리뷰 한 개 조회")
     @GetMapping("/{reviewId}")
-    public ApiResponse<ReviewRes.ReviewDetailRes> getTripylerBoardDetail(@PathVariable Long reviewId, HttpServletRequest httpServletRequest) {
+    public ApiResponse<ReviewRes.ReviewDetailRes> getBoardDetail(@PathVariable Long reviewId, HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         ReviewRes.ReviewDetailRes result = reviewService.getReviewDetail(userId, reviewId);
         return new ApiResponse<>(result);

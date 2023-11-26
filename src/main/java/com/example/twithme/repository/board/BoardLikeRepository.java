@@ -37,7 +37,7 @@ public interface BoardLikeRepository extends JpaRepository<BoardLike, Long> {
     List<BoardLikeCountWhereIsRecruiting> countBoardIdWhereIsRecruiting(int isRecruiting);
 
     interface BoardLikeCountWhereIsRecruiting {
-        Long getTripylerId();
+        Long getBoardId();
         int getCnt();
     }
 

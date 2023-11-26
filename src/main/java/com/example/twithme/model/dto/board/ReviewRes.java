@@ -28,7 +28,7 @@ public class ReviewRes {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class TripylerWith{
+    public static class BoardWith {
         private Long userId;
         private String nickname;
         private String profileUrl;
@@ -45,9 +45,9 @@ public class ReviewRes {
     public static class ReviewDetailRes {
 
         //트리플러 정보
-        private Long tripylerId;
-        private String tripylerTitle;
-        private String tripylerImage;
+        private Long boardId;
+        private String boardTitle;
+        private String boardImage;
         private String nationName;
         private String regionName;
 
@@ -72,7 +72,7 @@ public class ReviewRes {
 
 
         //같이 간 사람 리스트
-        List<TripylerWith> tripylerWithList;
+        List<BoardWith> boardWithList;
 
 
         //트리플러 해시태그 5개
@@ -121,9 +121,9 @@ public class ReviewRes {
             }
             return ReviewDetailRes.builder()
                     //트리플러 정보
-                    .tripylerId(r.getBoard().getId())
-                    .tripylerTitle(r.getBoard().getTitle())
-                    .tripylerImage(r.getBoard().getImage())
+                    .boardId(r.getBoard().getId())
+                    .boardTitle(r.getBoard().getTitle())
+                    .boardImage(r.getBoard().getImage())
 //                    .nationName(r.getTripyler().getNation().getName())
 //                    .regionName(r.getTripyler().getRegion().getName())
                     .recruitPeopleNum(r.getBoard().getRecruitPeopleNum())
@@ -150,7 +150,7 @@ public class ReviewRes {
                     .tokenUserLiked(false)
 
                     //같이 간 사람 리스트
-                    .tripylerWithList(null)
+                    .boardWithList(null)
 
                     //트리플러 해시태그 5개
                     .hashtag1(null)
@@ -189,7 +189,7 @@ public class ReviewRes {
         private Long reviewId;
         private String nationName;
         private String regionName;
-        private String tripylerTitle;
+        private String boardTitle;
         private String reviewTitle;
         private int likes;
         private int comments;
