@@ -42,7 +42,7 @@ public class MyCollectionsController {
     }
 
     @ApiOperation(value = "내가 찜한 Triplog", notes = "내가 찜한 Triplog 목록을 조회합니다.")
-    @GetMapping("/board-like-list")
+    @GetMapping("/triplog-like-list")
     ApiResponse<List<BoardRes.MyBoardApplyListDto>> getMyReviewLikeList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         return new ApiResponse<>(reviewService.findReviewByLike(userId));
