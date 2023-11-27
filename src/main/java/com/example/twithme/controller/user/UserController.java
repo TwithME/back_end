@@ -12,8 +12,12 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.json.BasicJsonParser;
 import org.springframework.boot.json.JsonParser;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -29,36 +33,46 @@ import java.util.Map;
 @Api(tags={"01.User"})
 @RequiredArgsConstructor
 @RestController
-@RequestMapping(path = "", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserController {
 
     private final UserService userService;
 
 
-    @ApiOperation(value = "서버용(프론트 사용x)",
-            notes = "")
+    @ApiOperation(value = "서버용(프론트 사용x)", notes = "")
     @GetMapping("/oauth/kakao")
-    public ApiResponse<UserReq.KakaoLogInDto> getAccessTokenKakao(@RequestParam String code) {
-        //String accessTokenFromSocial = userService.getKakaoAccessToken(code);
-
-
-        String KAKAO_TOKEN_REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-        RestTemplate restTemplate=new RestTemplate();
-        Map<String, Object> params = new HashMap<>();
+    public ApiResponse<String> getAccessTokenKakao(@RequestParam(value = "code") String code) {
+        System.out.println("실행됨");
         System.out.println("code = "+code);
-        params.put("code", code);
-        params.put("client_id", "0f8b7cf617336b262bd00ba6ed4f7805");
-        params.put("redirect_uri", "http://semtle.catholic.ac.kr:8081/oauth/kakao");
-        params.put("grant_type", "authorization_code");
-        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(KAKAO_TOKEN_REQUEST_URL, params, String.class);
-        System.out.println(stringResponseEntity);
+        String accessTokenFromSocial = userService.getKakaoAccessToken(code);
+
+//        String REQUEST_URL = "https://kauth.kakao.com/oauth/token";
+//        RestTemplate restTemplate=new RestTemplate();
+//
+//        // Set Header
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+//        headers.add("Accept", "application/json");
+//
+//        // Set parameter
+//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
+//        params.add("grant_type", "authorization_code");
+//        params.add("client_id", "0f8b7cf617336b262bd00ba6ed4f7805");
+//        params.add("redirect_uri", "http://localhost:8081/oauth/kakao");
+//        params.add("code", code);
+//        // Set http entity
+//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
+//
+//        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(REQUEST_URL, request, String.class);
+//
+//        System.out.println("code = "+code);
+//        System.out.println(stringResponseEntity);
 
 
 
-        UserReq.KakaoLogInDto kakaoLogInDto = null;
-                //userService.createAndLoginKakaoUser(accessTokenFromSocial);
+        UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
 
-        return new ApiResponse<>(kakaoLogInDto);
+        return new ApiResponse<>("실행됨");
     }
 
 
