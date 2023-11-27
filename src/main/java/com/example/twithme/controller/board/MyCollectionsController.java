@@ -27,14 +27,14 @@ public class MyCollectionsController {
     private final ReviewService reviewService;
     private final UserService userService;
 
-    @ApiOperation(value = "내가 신청한 Tripyler", notes = "내가 신청한 Tripyler 목록을 조회합니다.")
+    @ApiOperation(value = "내가 신청한 목록", notes = "내가 신청한 목록을 조회합니다.")
     @GetMapping("/board-apply-list")
     ApiResponse<List<BoardRes.MyBoardApplyListDto>> getMyBoardApplyList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
         return new ApiResponse<>(boardService.findBoardApplyByApplicantId(userId));
     }
 
-    @ApiOperation(value = "내가 찜한 board", notes = "내가 찜한 Tripyler 목록을 조회합니다.")
+    @ApiOperation(value = "내가 찜한 board", notes = "내가 찜한 목록을 조회합니다.")
     @GetMapping("/board-like-list")
     ApiResponse<List<BoardRes.MyBoardApplyListDto>> getMyBoardLikeList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
@@ -48,7 +48,7 @@ public class MyCollectionsController {
         return new ApiResponse<>(reviewService.findReviewByLike(userId));
     }
 
-    @ApiOperation(value = "My boards", notes = "내가 작성한 Tripyler 목록을 조회합니다.")
+    @ApiOperation(value = "My boards", notes = "내가 작성한 목록을 조회합니다.")
     @GetMapping("/my-boards")
     ApiResponse<List<BoardRes.MyBoardListDto>> getMyBoardList(@RequestParam int year,
                                                               HttpServletRequest httpServletRequest) {
@@ -64,7 +64,7 @@ public class MyCollectionsController {
         return new ApiResponse<>(reviewService.myReviewWithYear(year, userId));
     }
 
-    @ApiOperation(value = "My boards 제목 리스트(작성한 것, 참여한 것 전부)", notes = "My Tripyler들(작성한 것, 참여한 것 전부)")
+    @ApiOperation(value = "My boards 제목 리스트(작성한 것, 참여한 것 전부)", notes = "작성한 것, 참여한 것 전부")
     @GetMapping("/my-all-boards")
     ApiResponse<List<BoardRes.MyBoardTitleDto>> getAllMyBoardList(HttpServletRequest httpServletRequest) {
         Long userId = userService.getUserId(httpServletRequest);
