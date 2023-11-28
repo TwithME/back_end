@@ -2,7 +2,7 @@ package com.example.twithme.service.user;
 
 import com.example.twithme.common.exception.BadRequestException;
 import com.example.twithme.common.exception.NotFoundException;
-import com.example.twithme.service.S3Service;
+
 import com.example.twithme.model.dto.user.UserReq;
 import com.example.twithme.model.dto.user.UserRes;
 import com.example.twithme.model.entity.hashtag.Hashtag;
@@ -42,7 +42,6 @@ public class UserService {
     private final JwtTokenProvider jwtTokenProvider;
     private final RestTemplate restTemplate;
 
-    private final S3Service s3Service;
     private final HashtagRepository hashtagRepository;
     private final UserHashtagRepository userHashtagRepository;
     private final MbtiRepository mbtiRepository;
