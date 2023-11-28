@@ -41,38 +41,10 @@ public class UserController {
 
     @ApiOperation(value = "서버용(프론트 사용x)", notes = "")
     @GetMapping("/oauth/kakao")
-    public ApiResponse<String> getAccessTokenKakao(@RequestParam(value = "code") String code) {
-        System.out.println("실행됨");
-        System.out.println("code = "+code);
+    public ApiResponse<UserReq.KakaoLogInDto> getAccessTokenKakao(@RequestParam(value = "code") String code) {
         String accessTokenFromSocial = userService.getKakaoAccessToken(code);
-
-//        String REQUEST_URL = "https://kauth.kakao.com/oauth/token";
-//        RestTemplate restTemplate=new RestTemplate();
-//
-//        // Set Header
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
-//        headers.add("Accept", "application/json");
-//
-//        // Set parameter
-//        MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
-//        params.add("grant_type", "authorization_code");
-//        params.add("client_id", "0f8b7cf617336b262bd00ba6ed4f7805");
-//        params.add("redirect_uri", "http://localhost:8081/oauth/kakao");
-//        params.add("code", code);
-//        // Set http entity
-//        HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(params, headers);
-//
-//        ResponseEntity<String> stringResponseEntity = restTemplate.postForEntity(REQUEST_URL, request, String.class);
-//
-//        System.out.println("code = "+code);
-//        System.out.println(stringResponseEntity);
-
-
-
         UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
-
-        return new ApiResponse<>("실행됨");
+        return new ApiResponse<>(kakaoLogInDto);
     }
 
 
