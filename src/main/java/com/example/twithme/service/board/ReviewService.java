@@ -1,7 +1,7 @@
 package com.example.twithme.service.board;
 
 import com.example.twithme.common.exception.NotFoundException;
-import com.example.twithme.service.S3Service;
+
 import com.example.twithme.model.dto.board.ReviewReq;
 import com.example.twithme.model.dto.board.ReviewRes;
 import com.example.twithme.model.dto.board.BoardRes;
@@ -35,7 +35,6 @@ public class ReviewService {
 
     private final UserService userService;
 
-    private final S3Service s3Service;
 
     private final UserRepository userRepository;
 
