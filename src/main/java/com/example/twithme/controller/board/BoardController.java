@@ -62,23 +62,7 @@ public class BoardController {
     @ApiOperation(value = "여행자 찾기 게시물 작성", notes = "여행자 찾기 게시물을 작성합니다.\n" +
             "body에 json을 넣을 땐 \"application/json\"으로,\n" +
             "이미지 파일을 넣을 땐 \"image/png\" 또는 \"image/jpeg\"로\n" +
-            "Content Type을 따로 지정해서 API 호출 해야 함\n\n" +
-            "body 예시:\n" +
-            "{\n" +
-            "  \"content\": \"내용내용 동행자 찾는 내용\",\n" +
-            "  \"continentId\": 5,\n" +
-            "  \"endDate\": \"2023-07-22\",\n" +
-            "  \"fifthTripStyleId\": 1,\n" +
-            "  \"firstTripStyleId\": 2,\n" +
-            "  \"fourthTripStyleId\": 3,\n" +
-            "  \"nationId\": 46,\n" +
-            "  \"regionId\": 199,\n" +
-            "  \"secondTripStyleId\": 5,\n" +
-            "  \"startDate\": \"2023-07-21\",\n" +
-            "  \"thirdTripStyleId\": 4,\n" +
-            "  \"title\": \"동행자 찾아요\",\n" +
-            "  \"totalPeopleNum\": 4\n" +
-            "}")
+            "Content Type을 따로 지정해서 API 호출 해야 함\n\n")
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ApiResponse<String> createBoard(@RequestPart(name = "board") BoardReq.BoardCreateDto boardCreateDto,
                                            @RequestPart(name = "images", required = false) MultipartFile multipartFile,
