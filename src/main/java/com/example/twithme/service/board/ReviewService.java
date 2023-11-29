@@ -16,6 +16,7 @@ import com.example.twithme.repository.destination.NationRepository;
 import com.example.twithme.repository.destination.RegionRepository;
 import com.example.twithme.repository.hashtag.HashtagRepository;
 import com.example.twithme.repository.user.UserRepository;
+import com.example.twithme.service.S3Service;
 import com.example.twithme.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -34,6 +35,8 @@ import java.util.Optional;
 public class ReviewService {
 
     private final UserService userService;
+
+    private final S3Service s3Service;
 
 
     private final UserRepository userRepository;
@@ -93,11 +96,11 @@ public class ReviewService {
 
     public void uploadReviewImage(Long reviewId, MultipartFile multipartFile) {
         Review review = getReviewByReviewId(reviewId);
-        //String url = s3Service.uploadImage("review", review.getId().toString(), multipartFile);
+        String url = s3Service.uploadImage("review", review.getId().toString(), multipartFile);
 
         ReviewImage e = ReviewImage.builder()
                 .review(review)
-                .url("url")
+                .url(url)
                 .build();
 
         reviewImageRepository.save(e);
@@ -301,10 +304,6 @@ public class ReviewService {
                 break;
             }
         }
-
-
-
-
 
 
         //조회수 1상승

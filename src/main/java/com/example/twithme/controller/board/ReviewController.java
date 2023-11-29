@@ -28,11 +28,7 @@ public class ReviewController {
 
     private final ReviewService reviewService;
 
-    @ApiOperation(value = "트리플러 리뷰 작성", notes = "review : { \"tripylerId\" : 26,\n" +
-            "\"title\" : \"트리플러 26번에 대한 리뷰 제목\", \n" +
-            " \"content\" : \"트리플러 26번에 대한 리뷰 내용\", \n" +
-            "\"oneLine\" : \"트리플러 26번에 대한 리뷰 한 줄 평\"\n" +
-            "}")
+    @ApiOperation(value = "리뷰 작성", notes = "")
     @PostMapping("")
     public ApiResponse<Long> createReview(@RequestBody ReviewReq.ReviewCreateDto reviewCreateDto,
                                           HttpServletRequest httpServletRequest) {
@@ -42,7 +38,7 @@ public class ReviewController {
     }
 
     @ApiOperation(value = "리뷰 사진 업로드", notes = "리뷰의 사진을 업로드합니다.")
-    @PostMapping("/{reviewId}/profile-picture")
+    @PostMapping("/{reviewId}/picture")
     public ApiResponse<String> uploadProfileImage(@PathVariable Long reviewId,
                                                   @RequestPart(name = "images", required = true) MultipartFile multipartFile,
                                                   HttpServletRequest httpServletRequest) {

@@ -19,32 +19,32 @@ public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
 
-//    public String uploadImage(String folderName, String fileName, MultipartFile multipartFile) {
-//        if(multipartFile == null) {
-//            return null;
-//        }
-//        ObjectMetadata objectMetadata = new ObjectMetadata();
-//        objectMetadata.setContentType(multipartFile.getContentType());
-//        objectMetadata.setContentLength(multipartFile.getSize());
-//        String uploadFileName = concatFolderName(folderName, fileName);
-//        try {
-//            InputStream inputStream = multipartFile.getInputStream();
-//            amazonS3Client.putObject(
-//                    new PutObjectRequest("tripyle", uploadFileName, inputStream, objectMetadata)
-//                            .withCannedAcl(CannedAccessControlList.PublicRead)
-//            );
-//        }
-//        catch(IOException e) {
-//            throw new BadRequestException("잘못된 형식의 파일입니다.");
-//        }
-//        return getImageUrl(uploadFileName);
-//    }
-//
-//    public String concatFolderName(String folderName, String fileName) {
-//        return folderName + "/" + UUID.randomUUID() + "-" + fileName;
-//    }
-//
-//    public String getImageUrl(String uploadFileName) {
-//        return "https://tripyle.s3.ap-northeast-2.amazonaws.com/" + uploadFileName;
-//    }
+    public String uploadImage(String folderName, String fileName, MultipartFile multipartFile) {
+        if(multipartFile == null) {
+            return null;
+        }
+        ObjectMetadata objectMetadata = new ObjectMetadata();
+        objectMetadata.setContentType(multipartFile.getContentType());
+        objectMetadata.setContentLength(multipartFile.getSize());
+        String uploadFileName = concatFolderName(folderName, fileName);
+        try {
+            InputStream inputStream = multipartFile.getInputStream();
+            amazonS3Client.putObject(
+                    new PutObjectRequest("twithme", uploadFileName, inputStream, objectMetadata)
+                            .withCannedAcl(CannedAccessControlList.PublicRead)
+            );
+        }
+        catch(IOException e) {
+            throw new BadRequestException("잘못된 형식의 파일입니다.");
+        }
+        return getImageUrl(uploadFileName);
+    }
+
+    public String concatFolderName(String folderName, String fileName) {
+        return folderName + "/" + UUID.randomUUID() + "-" + fileName;
+    }
+
+    public String getImageUrl(String uploadFileName) {
+        return "https://twithme.s3.ap-northeast-2.amazonaws.com/" + uploadFileName;
+    }
 }

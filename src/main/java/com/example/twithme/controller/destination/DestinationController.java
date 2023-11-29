@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
 
-@Api(tags={"06.Destination"})
+@Api(tags={"05.Destination"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/destination", produces = MediaType.APPLICATION_JSON_VALUE)

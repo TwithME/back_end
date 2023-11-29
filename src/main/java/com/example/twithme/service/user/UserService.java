@@ -14,6 +14,7 @@ import com.example.twithme.repository.user.MbtiRepository;
 import com.example.twithme.repository.user.UserHashtagRepository;
 import com.example.twithme.repository.user.UserRepository;
 import com.example.twithme.config.security.JwtTokenProvider;
+import com.example.twithme.service.S3Service;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import lombok.RequiredArgsConstructor;
@@ -41,6 +42,8 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final RestTemplate restTemplate;
+
+    private final S3Service s3Service;
 
     private final HashtagRepository hashtagRepository;
     private final UserHashtagRepository userHashtagRepository;
@@ -118,17 +121,16 @@ public class UserService {
 
 
     public void uploadProfileImage(Long userId, MultipartFile multipartFile) {
-        //String profileUrl = s3Service.uploadImage("profile", Long.toString(userId), multipartFile);
+        String profileUrl = s3Service.uploadImage("profile", Long.toString(userId), multipartFile);
 
         Optional<User> optionalUser = userRepository.findById(userId);
         if(optionalUser.isPresent()) {
             User user = optionalUser.get();
-            user.setProfileUrl("profileUrl");
+            user.setProfileUrl(profileUrl);
             userRepository.save(user);
         }
         else {
-//            branch 합친 후에 NotFoundException으로 바꿔야 함
-            throw new BadRequestException("존재하지 않는 회원입니다.");
+            throw new NotFoundException("존재하지 않는 회원입니다.");
         }
     }
 
@@ -254,16 +256,16 @@ public class UserService {
         String mbti = user.getMbti() == null ? null : user.getMbti().getName();
 
         return UserRes.ProfileDto.builder()
-               // .name(user.isNamePrivate() ? null : user.getName())
+                .name(user.getName())
                 .username(user.getUsername())
                 .age(age)
-                //.instagram(user.isInstagramPrivate() ? null : user.getInstagram())
-                //.phone(user.isPhonePrivate() ? null : user.getPhone())
+                .instagram(user.getInstagram())
+                .phone(user.getPhone())
                 .gender(user.getGender())
                 .firstBio(user.getFirstBio())
                 .secondBio(user.getSecondBio())
                 .thirdBio(user.getThirdBio())
-                //.mbti(user.isMbtiPrivate() ? null : mbti)
+                .mbti(mbti)
                 .firstTripStyle(hashtagName.get(0))
                 .secondTripStyle(hashtagName.get(1))
                 .thirdTripStyle(hashtagName.get(2))
@@ -373,7 +375,7 @@ public class UserService {
             StringBuilder sb = new StringBuilder();
             sb.append("grant_type=authorization_code");
             sb.append("&client_id=" + "0f8b7cf617336b262bd00ba6ed4f7805");
-            sb.append("&redirect_uri=" +"http://semtle.catholic.ac.kr:8081/oauth/kakao");  //"http://semtle.catholic.ac.kr:8081/oauth/kakao"
+            sb.append("&redirect_uri=" +"http://semtle.catholic.ac.kr:8081/oauth/kakao");
             sb.append("&code=" + code);
             bw.write(sb.toString());
             bw.flush();
