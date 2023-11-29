@@ -48,7 +48,7 @@ public class MyCollectionsController {
         return new ApiResponse<>(reviewService.findReviewByLike(userId));
     }
 
-    @ApiOperation(value = "My boards", notes = "내가 작성한 목록을 조회합니다.")
+    @ApiOperation(value = "내가 작성한 여행 동행자 모집글", notes = "내가 작성한 목록을 조회합니다.")
     @GetMapping("/my-boards")
     ApiResponse<List<BoardRes.MyBoardListDto>> getMyBoardList(@RequestParam int year,
                                                               HttpServletRequest httpServletRequest) {

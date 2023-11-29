@@ -547,8 +547,8 @@ public class BoardRes {
 
 
         @Override
-        public int compareTo(MyBoardTitleDto tripylerTitleDto) {
-              return tripylerTitleDto.getRegDateTime().compareTo(this.regDateTime);
+        public int compareTo(MyBoardTitleDto myBoardTitleDto) {
+              return myBoardTitleDto.getRegDateTime().compareTo(this.regDateTime);
         }
 
     }

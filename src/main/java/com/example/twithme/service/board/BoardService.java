@@ -29,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Service
@@ -934,7 +935,7 @@ public class BoardService {
                     .startDate(board.getStartDate())
                     .endDate(board.getEndDate())
                     .withList(boardWithList)
-                    .regDateTime(board.getRegDateTime())
+                    .regDateTime(board.getRegDateTime() == null? LocalDateTime.now() : board.getRegDateTime())
                     .build();
 
             result.add(e);

@@ -21,10 +21,10 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
 
     List<Review> findAll();
 
-    @Query(value = "select review.id as id, tripyler_id, review.writer_id as writer_id, review.title as title, review.hits as hits, review.content as content, " +
+    @Query(value = "select review.id as id, board_id, review.writer_id as writer_id, review.title as title, review.hits as hits, review.content as content, " +
             "review.one_line as one_line, review.mod_dt as mod_dt, review.mod_user_id as mod_user_id, review.reg_user_id as reg_user_id, review.reg_dt as reg_dt, review.delete_yn as delete_yn " +
-            "from review join tripyler on review.tripyler_id = tripyler.id " +
-            "where review.writer_id = :userId and YEAR(tripyler.start_dt) = :year",
+            "from review join board on review.board_id = board.id " +
+            "where review.writer_id = :userId and YEAR(board.start_dt) = :year",
             nativeQuery = true)
     List<Review> findByYearAndUserId(int year, Long userId);
 
