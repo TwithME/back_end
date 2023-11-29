@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
-@Api(tags={"07.Board"})
+@Api(tags={"06.Board"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/board", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -106,7 +106,7 @@ public class BoardController {
     }
 
 
-    @ApiOperation(value = "트리플러 신청하기", notes = "해당 트리플러 게시물을 신청할 수 있습니다. ")
+    @ApiOperation(value = "여행자 찾기 신청하기", notes = "해당 여행자 찾기 게시물을 신청할 수 있습니다. ")
     @PostMapping("/apply")
     public ApiResponse<String> applyBoard(@RequestBody BoardReq.BoardApplyDto boardApplyDto, HttpServletRequest httpServletRequest){
         Long userId = userService.getUserId(httpServletRequest);

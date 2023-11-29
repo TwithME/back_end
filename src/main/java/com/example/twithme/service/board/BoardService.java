@@ -21,6 +21,7 @@ import com.example.twithme.repository.destination.RegionRepository;
 import com.example.twithme.repository.hashtag.HashtagRepository;
 import com.example.twithme.repository.user.UserHashtagRepository;
 import com.example.twithme.repository.user.UserRepository;
+import com.example.twithme.service.S3Service;
 import com.example.twithme.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -37,7 +38,7 @@ public class BoardService {
 
     private final UserService userService;
   
-    //private final S3Service s3Service;
+    private final S3Service s3Service;
   
     private final UserRepository userRepository;
   
@@ -292,23 +293,25 @@ public class BoardService {
 
                 .build();
         boardRepository.save(board);
-        //String imageUrl = s3Service.uploadImage("tripyler", Long.toString(tripyler.getId()), multipartFile);
-        board.setImage("");
+        String imageUrl = s3Service.uploadImage("board", Long.toString(board.getId()), multipartFile);
+        board.setImage(imageUrl);
         boardRepository.save(board);
 
 
-        //사전 동행 신청자 추가
-        for(String s : boardCreateDto.getWithList()){
-            User withUser = userRepository.findByUsername(s);
+        if(boardCreateDto.getWithList() != null){
+            //사전 동행 신청자 추가
+            for(String s : boardCreateDto.getWithList()){
+                User withUser = userRepository.findByUsername(s);
 
-            BoardApply boardApply = BoardApply.builder()
-                    .board(board)
-                    .applicant(withUser)
-                    .content("사전 신청 동행자")
-                    .accepted(1)
-                    .build();
+                BoardApply boardApply = BoardApply.builder()
+                        .board(board)
+                        .applicant(withUser)
+                        .content("사전 신청 동행자")
+                        .accepted(1)
+                        .build();
 
-            boardApplyRepository.save(boardApply);
+                boardApplyRepository.save(boardApply);
+            }
         }
 
 
@@ -341,11 +344,11 @@ public class BoardService {
         board.setEstimatedPrice(boardCreateDto.getEstimatedPrice());
         boardRepository.save(board);
 
-//        String imageUrl = s3Service.uploadImage("tripyler", Long.toString(tripyler.getId()), multipartFile);
-//        if(imageUrl != null) {
-//            tripyler.setImage(imageUrl);
-//            tripylerRepository.save(tripyler);
-//        }
+        String imageUrl = s3Service.uploadImage("board", Long.toString(board.getId()), multipartFile);
+        if(imageUrl != null) {
+            board.setImage(imageUrl);
+            boardRepository.save(board);
+        }
 
         List<Long> newHashtagIds = Arrays.asList(boardCreateDto.getFirstTripStyleId(),
                 boardCreateDto.getSecondTripStyleId(), boardCreateDto.getThirdTripStyleId(),
@@ -560,16 +563,8 @@ public class BoardService {
         }
 
 
-
-
-
-
-
         //조회수 증가
         boardRepository.incrementHits(boardId);
-
-
-
 
         return result;
     }
@@ -631,10 +626,10 @@ public class BoardService {
 
     //신청 상세보기
     public BoardRes.AppliedDetailDto getAppliedDetail(Long tripylerApplyId) {
-        // 해당 Tripyler 신청 가져오기
+        // 해당 게시물 신청 가져오기
         BoardApply boardApply = boardApplyRepository.findBoardApplyById(tripylerApplyId);
 
-        // Tripyler 신청이 존재할 경우에만 실행
+        //  신청이 존재할 경우에만 실행
         if (boardApply != null) {
             List<UserHashtag> hashtags = userHashtagRepository.findByUser(boardApply.getApplicant());
             List<String> hashtagArray = new ArrayList<>();
@@ -780,7 +775,6 @@ public class BoardService {
 
     public boolean acceptBoard(Long boardApplyId){
         BoardApply boardApply = boardApplyRepository.findBoardApplyById(boardApplyId);
-
 
         if (boardApply != null) {
             boardApply.setAccepted(1);
@@ -945,7 +939,6 @@ public class BoardService {
 
             result.add(e);
         }
-
 
         //최종 정렬
         Collections.sort(result);

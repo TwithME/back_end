@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
-@Api(tags={"05.Chat"})
+@Api(tags={"04.Chat"})
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/chat", produces = MediaType.APPLICATION_JSON_VALUE)
