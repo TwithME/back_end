@@ -41,11 +41,20 @@ public class UserController {
 
     @ApiOperation(value = "서버용(프론트 사용x)", notes = "")
     @GetMapping("/oauth/kakao")
-    public ApiResponse<UserReq.KakaoLogInDto> getAccessTokenKakao(@RequestParam(value = "code") String code) {
+    public ApiResponse<String> getCode(@RequestParam(value = "code") String code) {
         String accessTokenFromSocial = userService.getKakaoAccessToken(code);
+        //UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
+        return new ApiResponse<>(accessTokenFromSocial);
+    }
+
+    @ApiOperation(value = "카카오로부터 정보 받기", notes = "/oauth/kakao에서 받은 카카오 액세스 토큰 입력해 주세요")
+    @GetMapping("/info/kakao")
+    public ApiResponse< UserReq.KakaoLogInDto> getInfoFromKakao(@RequestParam(value = "accessTokenFromSocial") String accessTokenFromSocial) {
+        //String accessTokenFromSocial = userService.getKakaoAccessToken(code);
         UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
         return new ApiResponse<>(kakaoLogInDto);
     }
+
 
 
     @ApiOperation(value = "카카오 추가 회원가입", notes = "카카오 회원가입 후 추가 정보를 등록하는 API 입니다.\n" +
