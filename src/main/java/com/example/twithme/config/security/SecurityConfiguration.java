@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/", "/user/authentication-code/send",
                         "/user/auth/name", "/user/auth/username", "/user/password/change",
                         "/hashtag/*", "/profile/mbti",
-                        "/tripyler/list", "/review/list", "/oauth/kakao").permitAll()
+                        "/board/list", "/review/list", "/oauth/kakao", "/user/login/kakao").permitAll()
                 .antMatchers("/user/signup/kakao",
                         "/profile/*", "/profile/**",
                         "/chat/*", "/chat/**",
