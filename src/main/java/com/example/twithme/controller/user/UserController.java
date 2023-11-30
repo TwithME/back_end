@@ -43,49 +43,16 @@ public class UserController {
     @GetMapping("/oauth/kakao")
     public ApiResponse<String> getCode(@RequestParam(value = "code") String code) {
         String accessTokenFromSocial = userService.getKakaoAccessToken(code);
-        //UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
         return new ApiResponse<>(accessTokenFromSocial);
-    }
-
-    @ApiOperation(value = "카카오로부터 정보 받기", notes = "/oauth/kakao에서 받은 카카오 액세스 토큰 입력해 주세요")
-    @GetMapping("/info/kakao")
-    public ApiResponse< UserReq.KakaoLogInDto> getInfoFromKakao(@RequestParam(value = "accessTokenFromSocial") String accessTokenFromSocial) {
-        //String accessTokenFromSocial = userService.getKakaoAccessToken(code);
-        UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
-        return new ApiResponse<>(kakaoLogInDto);
-    }
-
-
-
-    @ApiOperation(value = "카카오 추가 회원가입", notes = "카카오 회원가입 후 추가 정보를 등록하는 API 입니다.\n" +
-            "/user/login/kakao을 통해 받은 accessToken을 입력해야만 해당 API 호출이 가능합니다.")
-    @PostMapping("/user/signup/kakao")
-    public ApiResponse<String> kakaoSignUp(@RequestBody UserReq.KakaoSignUpDto kakaoSignUpDto,
-                                           HttpServletRequest httpServletRequest) {
-        Long userId = userService.getUserId(httpServletRequest);
-        userService.doKakaoAdditionalSignUp(userId, kakaoSignUpDto);
-        return new ApiResponse<>("카카오 회원가입이 완료되었습니다.");
     }
 
 
     @ApiOperation(value = "카카오 로그인", notes = "카카오 계정으로 로그인을 합니다.")
     @PostMapping("/user/login/kakao")
-    public ApiResponse<UserRes.UserInfoWithToken> doKakaoLogIn(@RequestBody UserReq.KakaoLogInDto kakaoLogInDto) {
-//        Base64.Decoder decoder = Base64.getUrlDecoder();
-//        final String payload = new String(decoder.decode(kakaoLogInDto.getSnsId().split("\\.")[1]));
-//        JsonParser jsonParser = new BasicJsonParser();
-//        Map<String, Object> jsonArray;
-//        try {
-//            jsonArray = jsonParser.parseMap(payload);
-//        }
-//        catch(RuntimeException e) {
-//            throw new BadRequestException("Token 값을 parsing 하지 못하였습니다. 관리자에게 문의해주세요.");
-//        }
-//        if (!jsonArray.containsKey("sub")) {
-//            throw new ServerErrorException();
-//        }
-//        String snsId = jsonArray.get("sub").toString();
+    public ApiResponse<UserRes.UserInfoWithToken> doKakaoLogIn(
+            @RequestParam(value = "accessTokenFromSocial") String accessTokenFromSocial) {
 
+        UserReq.KakaoLogInDto kakaoLogInDto = userService.createAndLoginKakaoUser(accessTokenFromSocial);
 
         //카카오 유저 생성
         boolean needsAdditionalSignUp = false;
@@ -107,5 +74,15 @@ public class UserController {
         return new ApiResponse<>(userInfoWithToken);
     }
 
+
+    @ApiOperation(value = "카카오 추가 회원가입", notes = "카카오 회원가입 후 추가 정보를 등록하는 API 입니다.\n" +
+            "/user/login/kakao을 통해 받은 accessToken을 입력해야만 해당 API 호출이 가능합니다.")
+    @PostMapping("/user/signup/kakao")
+    public ApiResponse<String> kakaoSignUp(@RequestBody UserReq.KakaoSignUpDto kakaoSignUpDto,
+                                           HttpServletRequest httpServletRequest) {
+        Long userId = userService.getUserId(httpServletRequest);
+        userService.doKakaoAdditionalSignUp(userId, kakaoSignUpDto);
+        return new ApiResponse<>("카카오 회원가입이 완료되었습니다.");
+    }
 
 }
